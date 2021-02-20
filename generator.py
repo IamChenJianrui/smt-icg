@@ -9,6 +9,7 @@ class FormulaGenerator:
         self.domain = domain
         self.transition_formula = domain.transition_formula()
         self.ending_state = [self.get_state_tuple(state) for state in domain.ending_states]
+        self.constraint = self.domain.constraints
 
         self.p_demo = {*self.ending_state}
         self.n_demo = set()
@@ -56,13 +57,9 @@ class FormulaGenerator:
         self.p_demo.add(state)
         return False
 
-    def build_formula(self, arr):
-        clauses = [And(*c) for c in arr]
-        return Or(*clauses)
-
     def generate(self, idx=0):
         formula_template = FormulaTemplate(self.domain.variables, *tmp_size[idx])
-        constraint = self.domain.constraints
+
 
         eff_var = list(self.domain.eff_mapper.values())
 
@@ -81,13 +78,13 @@ class FormulaGenerator:
         while check == sat:
             print("\n\nSP:", self.p_set)
             print("SN:", self.n_set)
-            nf = self.build_formula(formula_template.formula_arr())
-            a_nf = self.build_formula(formula_template.formula_arr(*eff_var))
+            nf = formula_template.formula()
+            a_nf = formula_template.formula(*eff_var)
             print("N-formula: \n", nf)
 
             s1 = Solver()
             s1.set("timeout", 60000)
-            s1.add(constraint, Not(con1(nf, a_nf)))
+            s1.add(self.constraint, Not(con1(nf, a_nf)))
 
             if s1.check() == sat:
                 model = s1.model()
@@ -111,7 +108,7 @@ class FormulaGenerator:
                 print("Condition1 sat.")
                 s2 = Solver()
                 s2.set("timeout", 60000)
-                s2.add(constraint, self.not_equ_ending, Not(con2(nf, a_nf)))
+                s2.add(self.constraint, self.not_equ_ending, Not(con2(nf, a_nf)))
                 if s2.check() == sat:
                     model = s2.model()
                     example = [model[formula_template.vi[i]].as_long()
@@ -141,4 +138,9 @@ class FormulaGenerator:
                 print('extending...')
                 return self.generate(idx + 1)
 
-        return formula_template.formula_arr()
+        return formula_template.formula()
+
+
+class StrategyGenerator:
+    def __init__(self):
+        pass
