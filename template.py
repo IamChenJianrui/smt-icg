@@ -1,11 +1,13 @@
 from z3 import *
 
+
 def sum(iter):
     tmp_list = [i for i in iter]
     res = tmp_list[0]
     for i in tmp_list[1:]:
         res += i
     return res
+
 
 class FormulaTemplate:
     def __init__(self, vi, k, h, m, timeout=300000):
@@ -80,45 +82,77 @@ class FormulaTemplate:
             Tk.append(And(*clause))
         return Or(*Tk) == label
 
-    def formula_arr(self, *val):
+    def solution(self):
         model = self.s.model()
-        val = self.vi if len(val) == 0 else val
+        self.M = [[model[self.amij[i][j]].as_long() if model[self.amij[i][j]] is not None else 0
+              for j in range(self.n)]
+             for i in range(self.m)]
+        self.E = [model[self.ei[i]].as_long() if model[self.ei[i]] is not None else 1 for i in range(self.m)]
+        self.C = [model[self.ci[i]].as_long() if model[self.ci[i]] is not None else 0 for i in range(self.m)]
 
-        M = [
-            [model[self.amij[i][j]].as_long() if model[self.amij[i][j]] is not None else 0 for j in range(self.n)]
-            for i in range(self.m)]
-        E = [model[self.ei[i]].as_long() if model[self.ei[i]] is not None else 1 for i in range(self.m)]
-        C = [model[self.ci[i]].as_long() if model[self.ci[i]] is not None else 0 for i in range(self.m)]
+        self.A = [[model[self.aeij[i][j]].as_long() if model[self.aeij[i][j]] is not None else 0
+              for j in range(self.n)]
+             for i in range(self.h)]
+        self.B = [model[self.bi[i]].as_long() if model[self.bi[i]] is not None else 0 for i in range(self.h)]
 
-        A = [
-            [model[self.aeij[i][j]].as_long() if model[self.aeij[i][j]] is not None else 0 for j in range(self.n)]
-            for i in range(self.h)]
-        B = [model[self.bi[i]].as_long() if model[self.bi[i]] is not None else 0 for i in range(self.h)]
+        self.He = [
+            [bool(model[self.heij[i][j]]) if model[self.heij[i][j]] is not None else False
+             for j in range(self.h)]
+            for i in range(self.k)
+        ]
 
-        Eq = [sum(val[j] * A[i][j] for j in range(self.n)) != B[i] for i in range(self.h)]
-        Ge = [sum(val[j] * A[i][j] for j in range(self.n)) >= B[i] for i in range(self.h)]
-        Le = [sum(val[j] * A[i][j] for j in range(self.n)) <= B[i] for i in range(self.h)]
+        self.Hge = [
+            [bool(model[self.hgeij[i][j]]) if model[self.hgeij[i][j]] is not None else False
+             for j in range(self.h)]
+            for i in range(self.k)
+        ]
 
-        Me = [sum(val[j] * M[i][j] for j in range(self.n)) % E[i] == C[i] for i in range(self.m)]
+        self.Hle = [
+            [bool(model[self.hleij[i][j]]) if model[self.hleij[i][j]] is not None else False
+             for j in range(self.h)]
+            for i in range(self.k)
+        ]
+
+        self.T = [
+            [bool(model[self.tij[i][j]]) if model[self.tij[i][j]] is not None else False
+             for j in range(self.m)]
+            for i in range(self.k)
+        ]
+
+        self.Nt = [
+            [bool(model[self.ntij[i][j]]) if model[self.ntij[i][j]] is not None else False
+             for j in range(self.m)]
+            for i in range(self.k)
+        ]
+
+    def formula(self, *val):
+        if len(val) == 0:
+            val = self.vi
+        self.solution()
+        Eq = [sum(val[j] * self.A[i][j] for j in range(self.n)) != self.B[i] for i in range(self.h)]
+        Ge = [sum(val[j] * self.A[i][j] for j in range(self.n)) >= self.B[i] for i in range(self.h)]
+        Le = [sum(val[j] * self.A[i][j] for j in range(self.n)) <= self.B[i] for i in range(self.h)]
+
+        Me = [sum(val[j] * self.M[i][j] for j in range(self.n)) % self.E[i] == self.C[i] for i in range(self.m)]
 
         formu = []
         for k in range(self.k):
             clause = []
             for h in range(self.h):
-                if model[self.heij[k][h]] is not None and bool(model[self.heij[k][h]]):
+                if self.He[k][h]:
                     clause.append(Eq[h])
-                if model[self.hgeij[k][h]] is not None and bool(model[self.hgeij[k][h]]):
+                if self.Hge[k][h]:
                     clause.append(Ge[h])
-                if model[self.hleij[k][h]] is not None and bool(model[self.hleij[k][h]]):
+                if self.Hle[k][h]:
                     clause.append(Le[h])
             for m in range(self.m):
-                if model[self.tij[k][m]] is not None and bool(model[self.tij[k][m]]):
+                if self.T[k][m]:
                     clause.append(Me[m])
-                if model[self.ntij[k][m]] is not None and bool(model[self.ntij[k][m]]):
+                if self.Nt[k][m]:
                     clause.append(Not(Me[m]))
 
-            formu.append(clause)
-        return formu
+            formu.append(And(*clause))
+        return Or(*formu)
 
 
 if __name__ == '__main__':
@@ -128,5 +162,5 @@ if __name__ == '__main__':
     print(smt.s)
     print(smt.check())
 
-    formu = smt.formula_arr()
+    formu = smt.formula()
     print(formu)
