@@ -8,6 +8,26 @@ def sum(iter):
         res += i
     return res
 
+def co_prime(num1, num2):
+    for num in range(2, min(num1, num2) + 1):
+        if num1 % num == 0 and num2 % num == 0:
+            return False
+    return True
+
+def gcd(*nums):
+    min_num = 1 << 32
+    for num in nums:
+        min_num = min(min_num, abs(num))
+    res = 1
+    for i in range(min_num, 1, -1):
+        flag = True
+        for num in nums:
+            if num % i != 0:
+                flag = False
+                break
+        if flag:
+            return i
+    return res
 
 class FormulaTemplate:
     def __init__(self, vi, k, h, m, timeout=300000):
@@ -38,8 +58,9 @@ class FormulaTemplate:
         # 系数不能全部为0
         for ai in self.aeij:
             self.s.add(Or(*[a > 0 for a in ai]))
-        for mi in self.amij:
-            self.s.add(Or(*[m > 0 for m in mi]))
+        for i in range(m):
+            self.s.add(Or(*[(m % self.ei[i]) > 0 for m in self.amij[i]]))
+
         # 余数必须小于模
         self.s.add(*[And(self.ei[i] > self.ci[i], self.ci[i] >= 0) for i in range(m)])
         # 模必须大于等于2，并且小于一定范围
@@ -82,17 +103,17 @@ class FormulaTemplate:
             Tk.append(And(*clause))
         return Or(*Tk) == label
 
-    def solution(self):
+    def solve_model(self):
         model = self.s.model()
         self.M = [[model[self.amij[i][j]].as_long() if model[self.amij[i][j]] is not None else 0
-              for j in range(self.n)]
-             for i in range(self.m)]
+                   for j in range(self.n)]
+                  for i in range(self.m)]
         self.E = [model[self.ei[i]].as_long() if model[self.ei[i]] is not None else 1 for i in range(self.m)]
         self.C = [model[self.ci[i]].as_long() if model[self.ci[i]] is not None else 0 for i in range(self.m)]
 
         self.A = [[model[self.aeij[i][j]].as_long() if model[self.aeij[i][j]] is not None else 0
-              for j in range(self.n)]
-             for i in range(self.h)]
+                   for j in range(self.n)]
+                  for i in range(self.h)]
         self.B = [model[self.bi[i]].as_long() if model[self.bi[i]] is not None else 0 for i in range(self.h)]
 
         self.He = [
@@ -125,10 +146,29 @@ class FormulaTemplate:
             for i in range(self.k)
         ]
 
+        for i in range(self.m):
+            for j in range(self.n):
+                self.M[i][j] %= self.E[i]
+            flag = True
+            for am in self.M[i][1:]:
+                if am != self.M[i][0]:
+                    flag = False
+                    break
+            if flag:
+                if co_prime(self.M[i][0], self.E[i]):
+                    self.M[i] = [1 for _ in range(self.n)]
+
+        for i in range(self.h):
+            divisior = gcd(*self.A[i], self.B[i])
+            self.B[i] /= divisior
+            for j in range(self.n):
+                self.A[i][j] /= divisior
+
+
     def formula(self, *val):
         if len(val) == 0:
             val = self.vi
-        self.solution()
+        self.solve_model()
         Eq = [sum(val[j] * self.A[i][j] for j in range(self.n)) != self.B[i] for i in range(self.h)]
         Ge = [sum(val[j] * self.A[i][j] for j in range(self.n)) >= self.B[i] for i in range(self.h)]
         Le = [sum(val[j] * self.A[i][j] for j in range(self.n)) <= self.B[i] for i in range(self.h)]
@@ -164,3 +204,5 @@ if __name__ == '__main__':
 
     formu = smt.formula()
     print(formu)
+    print('-' * 50)
+    print(simplify(formu))

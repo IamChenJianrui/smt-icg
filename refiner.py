@@ -1,5 +1,5 @@
 
 class Refiner:
-    def __init__(self, formula_arr, constraint):
-        self.formula_arr = formula_arr
-        self.constraint = constraint
+    def __init__(self, model, feasible_region):
+        self.model = model
+        self.feasible_region = feasible_region
