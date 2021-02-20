@@ -3,9 +3,18 @@ from utils.split import split
 from utils.analyse_snt import analyse_snt_z3
 from action import Action
 
+
 # PDDL文件解析器
 class PDDLParser:
     def __init__(self, pddl_pwd):
+        self.pddl2icg = {}
+        self.eff_mapper = {}
+        self.variables = []
+        self.ending_states = []
+        self.constraints = None
+        self.actions = []
+        self.feasible_region = None
+
         lines = []
         for line in open(pddl_pwd):
             lines.append(line.strip())
@@ -35,13 +44,6 @@ class PDDLParser:
             print("%s: %s" % (k, v))
         print("/" * 100)
 
-        self.pddl2icg = {}
-        self.eff_mapper = {}
-        self.variables = []
-        self.ending_states = []
-        self.constraints = None
-        self.actions = []
-
         print("Analysing objects:")
         self._analyse_objects(task_dict["objects"])
         self.eff_mapper = {k: Int("w%d" % i) for i, k in enumerate(self.pddl2icg)}
@@ -56,6 +58,11 @@ class PDDLParser:
         else:
             self.ending_states.append(states)
         print(self.ending_states)
+        print("/" * 50)
+
+        print("Analysing feasible region:")
+        self.feasible_region = self._feasible_region(task_dict["constraint"][0])
+        print(self.feasible_region)
         print("/" * 50)
 
         print("Analysing constraint:")
@@ -103,6 +110,14 @@ class PDDLParser:
 
     def _analyse_action(self, action_list):
         return [Action(snt, self.pddl2icg, self.eff_mapper) for snt in action_list]
+
+    def _feasible_region(self, word_list):
+        def mapper(key):
+            if key in self.pddl2icg:
+                return self.pddl2icg[key]
+            else:
+                return int(key)
+        return analyse_snt_z3(word_list, mapper)
 
     def transition_formula(self):
         trans = False
