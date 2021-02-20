@@ -1,10 +1,7 @@
 # ICG策略生成器 
 
 ## install
-git clone 
-
-
-### 安装依赖
+git clone git@github.com:IamChenJianrui/smt-icg.git
 
 pip install z3-solver
 
