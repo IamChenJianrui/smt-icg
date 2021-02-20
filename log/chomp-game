@@ -1,0 +1,20 @@
+N-formula: Not(v0 + -1*v1 == 1)
+Total time cost: 0.2722737789154053
+N-formula: Not(v0 + -1*v1 == 1)
+Total time cost: 0.3141593933105469
+N-formula: Not(v0 + -1*v1 == 1)
+Total time cost: 0.30019712448120117
+N-formula: Or(Not(-1*v0 + v1 == -1),
+   And(Not(-1*v0 + v1 == -1), -1*v0 + v1 >= -1))
+Total time cost: 0.35504913330078125
+N-formula: Or(Not(-1*v0 + v1 == -1),
+   And(Not(-1*v0 + v1 == -1), -1*v0 + v1 >= -1))
+Total time cost: 0.3670492172241211
+N-formula: Not(-1*v0 + v1 == -1)
+Total time cost: 0.2752671241760254
+N-formula: Or(And(0 + v0*1 + v1*-1 != 1))
+Total time cost: 0.274263858795166
+N-formula: Or(And(v0*1 + v1*-1 != 1))
+Total time cost: 0.36598658561706543
+N-formula: Or(And(v0*1 + v1*-1 != 1))
+Total time cost: 0.37698960304260254
