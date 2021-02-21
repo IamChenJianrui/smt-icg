@@ -8,7 +8,7 @@ if __name__ == '__main__':
     start = time.time()
     domain = PDDLParser("./pddl/Take_Away.pddl")
     gen = FormulaGenerator(domain)
-    formula = gen.generate()
+    formula, _ = gen.generate()
     cost = time.time() - start
 
     if not os.path.exists("./log"):
