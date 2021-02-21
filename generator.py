@@ -138,7 +138,7 @@ class FormulaGenerator:
                 print('extending...')
                 return self.generate(idx + 1)
 
-        return formula_template.formula()
+        return simplify(formula_template.formula())
 
 
 class StrategyGenerator:
