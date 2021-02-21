@@ -10,12 +10,10 @@ class FormulaGenerator:
         self.transition_formula = domain.transition_formula()
         self.ending_state = [self.get_state_tuple(state) for state in domain.ending_states]
         self.constraint = self.domain.constraints
-
         self.p_demo = {*self.ending_state}
         self.n_demo = set()
         self.p_set = {*self.ending_state}
         self.n_set = set()
-
         self.not_equ_ending = False
 
         # 令P-state永远不能等于ending state
@@ -24,7 +22,6 @@ class FormulaGenerator:
                 self.not_equ_ending = Or(self.not_equ_ending, i != j)
         self.not_equ_ending = simplify(self.not_equ_ending)
         print("P-state constraint:", self.not_equ_ending)
-
         print("Transition formula of %s:" % domain.name)
         print(self.transition_formula)
         print("Ending states:", *self.ending_state)
@@ -60,7 +57,6 @@ class FormulaGenerator:
     def generate(self, idx=0):
         formula_template = FormulaTemplate(self.domain.variables, *tmp_size[idx])
 
-
         eff_var = list(self.domain.eff_mapper.values())
 
         def con1(nf, a_nf):
@@ -73,9 +69,9 @@ class FormulaGenerator:
             formula_template.add(state, False)
         for state in self.n_set:
             formula_template.add(state, True)
-        check = formula_template.check()
+        formula_template.check()
 
-        while check == sat:
+        while True:
             print("\n\nSP:", self.p_set)
             print("SN:", self.n_set)
             nf = formula_template.formula()
@@ -138,7 +134,7 @@ class FormulaGenerator:
                 print('extending...')
                 return self.generate(idx + 1)
 
-        return simplify(formula_template.formula())
+        return simplify(formula_template.formula()), formula_template.refine_model()
 
 
 class StrategyGenerator:
