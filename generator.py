@@ -64,9 +64,11 @@ class FormulaGenerator:
         eff_var = list(self.domain.eff_mapper.values())
 
         def con1(nf, a_nf):
+            # N-state的约束
             return Implies(nf, Exists(eff_var, And(self.transition_formula, Not(a_nf))))
 
         def con2(nf, a_nf):
+            # P-state的约束
             return Implies(Not(nf), ForAll(eff_var, Implies(self.transition_formula, a_nf)))
 
         for state in self.p_set:
@@ -85,7 +87,7 @@ class FormulaGenerator:
 
             s1 = Solver()
             s1.set("timeout", 60000)
-            s1.add(self.constraint, self.not_equ_ending, Not(con1(nf, a_nf)))
+            s1.add(self.constraint, Not(con1(nf, a_nf)))
 
             if s1.check() == sat:
                 model = s1.model()
