@@ -1,7 +1,10 @@
 from template import FormulaTemplate
 from z3 import *
+from random import randint
+from utils.refiner import Refiner
 
-tmp_size = [(1, 1, 0), (1, 0, 1), (1, 0, 2), (1, 1, 1), (2, 1, 1), (2, 2, 1), (2, 1, 2), (2, 1, 4)]
+tmp_size = [(1, 1, 0), (1, 0, 1), (1, 0, 2), (1, 1, 1), (2, 0, 1), (2, 0, 2), (2, 1, 1), (2, 2, 1), (2, 1, 2),
+            (2, 1, 4)]
 
 
 class FormulaGenerator:
@@ -49,12 +52,13 @@ class FormulaGenerator:
             return True  # It is a N state
         for eff_tuple in self.gen_eff(state):
             if not self.check_np(eff_tuple):  # exits an eff that is a P state
-                self.n_demo.add(eff_tuple)
+                self.n_demo.add(state)
                 return True
         self.p_demo.add(state)
         return False
 
     def generate(self, idx=0):
+        print(tmp_size[idx])
         formula_template = FormulaTemplate(self.domain.variables, *tmp_size[idx])
 
         eff_var = list(self.domain.eff_mapper.values())
@@ -69,18 +73,19 @@ class FormulaGenerator:
             formula_template.add(state, False)
         for state in self.n_set:
             formula_template.add(state, True)
-        formula_template.check()
+        if formula_template.check() == unsat:
+            return self.generate(idx + 1)
 
         while True:
             print("\n\nSP:", self.p_set)
             print("SN:", self.n_set)
-            nf = formula_template.formula()
-            a_nf = formula_template.formula(*eff_var)
+            nf = formula_template.formula_model()
+            a_nf = formula_template.formula_model(*eff_var)
             print("N-formula: \n", nf)
 
             s1 = Solver()
             s1.set("timeout", 60000)
-            s1.add(self.constraint, Not(con1(nf, a_nf)))
+            s1.add(self.constraint, self.not_equ_ending, Not(con1(nf, a_nf)))
 
             if s1.check() == sat:
                 model = s1.model()
@@ -88,18 +93,29 @@ class FormulaGenerator:
                            if model[formula_template.vi[i]] is not None
                            else 0 for i in range(formula_template.n)]
                 example = tuple(example)
-                print("Find a counter example", example)
-                if not self.check_np(example):  # 这是一个P状态
-                    print("This example belongs to P-state.")
-                    formula_template.add(example, False)
-                    self.p_set.add(example)
-                else:
-                    print("This example belong to N-state. Need to find its eff which belongs to P-state.")
-                    for eff in self.gen_eff(example):
-                        if not self.check_np(eff):
-                            print("find an eff", eff, ", which belongs to P-state.")
-                            formula_template.add(eff, False)
-                            self.p_set.add(eff)
+                n = len(example)
+                while True:
+                    try:
+                        print("Find a counter example", example)
+                        if not self.check_np(example):  # 这是一个P状态
+                            print("This example belongs to P-state.")
+                            formula_template.add(example, False)
+                            self.p_set.add(example)
+                        else:
+                            print("This example belong to N-state. Need to find its eff which belongs to P-state.")
+                            for eff in self.gen_eff(example):
+                                if not self.check_np(eff):
+                                    if bool(simplify(formula_template.formula_model(*eff))):
+                                        print("find an eff", eff, ", which belongs to P-state.")
+                                        formula_template.add(eff, False)
+                                        self.p_set.add(eff)
+                                        break
+                        break
+                    except RecursionError:
+                        print('this example is to large')
+                        example = tuple(randint(10, 100) for _ in range(n))
+                        while example in self.p_set or example in self.n_set:
+                            example = tuple(randint(10, 100) for _ in range(n))
             else:
                 print("Condition1 sat.")
                 s2 = Solver()
@@ -111,22 +127,33 @@ class FormulaGenerator:
                                if model[formula_template.vi[i]] is not None
                                else 0 for i in range(formula_template.n)]
                     example = tuple(example)
-                    print("Find a counter example", example)
-                    if self.check_np(example):
-                        print("This example belongs to N-state.")
-                        formula_template.add(example, True)
-                        self.n_set.add(example)
-                    else:
-                        print("This example belong to P-state. Need to find its eff which belongs to N-state.")
-                        for eff in self.gen_eff(example):
-                            if self.check_np(eff):
-                                print("find an eff", eff, ", which belongs to P-state.")
-                                formula_template.add(eff, True)
-                                self.n_set.add(eff)
+                    n = len(example)
+                    while True:
+                        try:
+                            print("Find a counter example", example)
+                            if self.check_np(example):
+                                print("This example belongs to N-state.")
+                                formula_template.add(example, True)
+                                self.n_set.add(example)
+                            else:
+                                print("This example belong to P-state. Need to find its eff which belongs to N-state.")
+                                for eff in self.gen_eff(example):
+                                    if self.check_np(eff):
+                                        if not bool(simplify(formula_template.formula_model(*eff))):
+                                            print("find an eff", eff, ", which belongs to P-state.")
+                                            formula_template.add(eff, True)
+                                            self.n_set.add(eff)
+                                            break
+                            break
+                        except RecursionError:
+                            print('this example is to large')
+                            example = tuple(randint(10, 100) for _ in range(n))
+                            while example in self.p_set or example in self.n_set:
+                                example = tuple(randint(10, 100) for _ in range(n))
                 else:
                     print("condition2 sat.")
                     break
-
+            print('generating formula...')
             check = formula_template.check()
             if check == unknown:
                 raise RuntimeError("z3 solver running out of time")
@@ -134,7 +161,7 @@ class FormulaGenerator:
                 print('extending...')
                 return self.generate(idx + 1)
 
-        return simplify(formula_template.formula()), formula_template.refine_model()
+        return simplify(formula_template.formula_model()), formula_template.refine_model()
 
 
 class StrategyGenerator:

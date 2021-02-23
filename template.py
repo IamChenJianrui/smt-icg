@@ -20,7 +20,6 @@ def gcd(*nums):
     min_num = abs(nums[0])
     for num in nums[1:]:
         min_num = min(min_num, abs(num))
-    res = 1
     for i in range(min_num, 1, -1):
         flag = True
         for num in nums:
@@ -29,11 +28,11 @@ def gcd(*nums):
                 break
         if flag:
             return i
-    return res
+    return 1
 
 
 class FormulaTemplate:
-    def __init__(self, vi, k, h, m, timeout=300000):
+    def __init__(self, vi, k, h, m, timeout=3000000):
         self.k = k  # amount of clause
         self.h = h  # number of inequality
         self.m = m  # number of mode number
@@ -51,22 +50,38 @@ class FormulaTemplate:
         self.tij = [[Bool('t' + str(j) + str(i)) for i in range(m)] for j in range(k)]
         self.ntij = [[Bool('nt' + str(j) + str(i)) for i in range(m)] for j in range(k)]
         self.s = Solver()
-        for ai in self.aeij:
+        for i in range(h):
             # 不等式系数ae_ij不能全部为0
-            self.s.add(Or(*[a > 0 for a in ai]))
+            self.s.add(Or(*[a > 0 for a in self.aeij[i]]))
+            for j in range(i + 1, h):
+                self.s.add(Or(*[self.aeij[i][w] != self.aeij[j][w] for w in range(n)]))
         for i in range(m):
             # 模等式的系数am_ij不能全部小于等于0
             self.s.add(Or(*[am > 0 for am in self.amij[i]]))
-            # 模等式的系数am_ij绝对值不能大于模e
-            self.s.add(*[And(-self.ei[i] < am, am < self.ei[i]) for am in self.amij[i]])
+            # 模等式的系数am_ij不能大于模e
+            self.s.add(*[And(0 <= am, am < self.ei[i]) for am in self.amij[i]])
+            for j in range(i + 1, m):
+                self.s.add(Or(*[self.amij[i][w] != self.amij[j][w] for w in range(m)]))
         # 余数c_i必须小于模e
         self.s.add(*[And(self.ei[i] > self.ci[i], self.ci[i] >= 0) for i in range(m)])
         # 模必须大于等于2，并且小于一定范围
-        self.s.add(*[And(e >= 2, e <= 2 * (m + 1)) for e in self.ei])
-        # 判断条件一定有一个是False，避免逻辑出现False
+        self.s.add(*[And (e <= 2 * m, e >= 2) for e in self.ei])
         for i in range(k):
-            self.s.add(*[Not(And(self.heij[i][j], self.hgeij[i][j], self.hleij[i][j])) for j in range(h)])
-            self.s.add(*[Not(And(self.tij[i][j], self.ntij[i][j])) for j in range(m)])
+            # 判断条件一定有一个是False，避免逻辑出现False
+            # self.s.add(*[Not(And(self.heij[i][j], self.hgeij[i][j], self.hleij[i][j])) for j in range(h)])
+            # self.s.add(*[Not(And(self.tij[i][j], self.ntij[i][j])) for j in range(m)])
+            for j in range(i + 1, k):
+                all_true = [And(self.heij[i][w], self.hgeij[i][w], self.hleij[i][w]) for w in range(h)]
+                all_true.extend([And(self.tij[i][w], self.ntij[i][w]) for w in range(m)])
+                struct_const = [Or(self.heij[i][w] != self.heij[j][w],
+                                    self.hgeij[i][w] != self.hgeij[j][w],
+                                    self.hleij[i][w] != self.hleij[j][w]) for w in range(h)]
+                struct_const.extend([Or(self.tij[i][w] != self.tij[j][w],
+                                         self.ntij[i][w] != self.ntij[j][w]) for w in range(m)])
+
+                self.s.add(Or(*struct_const, *all_true))
+
+
         self.s.set("timeout", timeout)
 
     def add(self, example, label):
@@ -133,21 +148,38 @@ class FormulaTemplate:
         ]
         for i in range(self.m):
             flag = True
-            for am in self.M[i][1:]:
-                if am != self.M[i][0]:
+            pix = -1
+            for am in self.M[i]:
+                if pix == -1:
+                    if am != 0:
+                        pix = am
+                elif am != pix:
                     flag = False
                     break
             if flag:
-                if co_prime(self.M[i][0], self.E[i]):
-                    self.M[i] = [1 for _ in range(self.n)]
+                if self.C[i] == 0:
+                    if co_prime(pix, self.E[i]):
+                        for j in range(self.n):
+                            if self.M[i][j] != 0:
+                                self.M[i][j] = 1
+                    else:
+                        div = gcd(pix, self.E[i])
+                        self.E[i] /= div
+                        for j in range(self.n):
+                            self.M[i][j] /= div
+                else:
+                    div = gcd(pix, self.E[i], self.C[i])
+                    self.E[i] /= div
+                    self.C[i] /= div
+                    for j in range(self.n):
+                        self.M[i][j] /= div
         for i in range(self.h):
             divisior = gcd(*self.A[i], self.B[i])
             self.B[i] /= divisior
             for j in range(self.n):
                 self.A[i][j] /= divisior
 
-
-    def formula(self, *val):
+    def formula_model(self, *val):
         if len(val) == 0:
             val = self.vi
         formu = []
@@ -168,14 +200,18 @@ class FormulaTemplate:
                     clause.append(Coe < self.B[h])
                 elif status == (True, True, False):
                     clause.append(Coe > self.B[h])
+                elif status == (True, True, True):
+                    clause.append(False)
             for m in range(self.m):
-                Me = sum(self.M[m][j] * val[j] for j in range(self.n)) % self.E[m] == self.C[m]
-                if self.T[k][m]:
-                    clause.append(Me)
-                elif self.Nt[k][m]:
-                    clause.append(Not(Me))
+                status = (self.T[k][m], self.Nt[k][m])
+                if status == (True, False):
+                    clause.append(sum(self.M[m][j] * val[j] for j in range(self.n)) % self.E[m] == self.C[m])
+                elif status == (False, True):
+                    clause.append(sum(self.M[m][j] * val[j] for j in range(self.n)) % self.E[m] != self.C[m])
+                elif status == (True, True):
+                    clause.append(False)
             formu.append(And(*clause))
-        return Or(*formu)
+        return simplify(Or(*formu))
 
     def refine_model(self):
         formu_arr = []
@@ -196,32 +232,36 @@ class FormulaTemplate:
                     clause.append([Coe < self.B[h]])
                 elif status == (True, True, False):
                     clause.append([Coe > self.B[h]])
+                elif status == (True, True, True):
+                    clause.append([False])
             for m in range(self.m):
+                status = (self.T[k][m], self.Nt[k][m])
                 Com = sum(self.M[m][j] * self.vi[j] for j in range(self.n))
-                if self.T[k][m]:
+                if status == (True, False):
                     clause.append([Com % self.E[m] == self.C[m]])
-                elif self.Nt[k][m]:
+                elif status == (False, True):
                     mod_clause = []
                     for i in range(self.E[m]):
                         if i != self.C[m]:
                             mod_clause.append(Com % self.E[m] == i)
                     clause.append(mod_clause)
+                elif status == (True, True):
+                    clause.append([False])
             formu_arr.append(clause)
         return formu_arr
 
-
 if __name__ == '__main__':
-    smt = FormulaTemplate([Int('v1'), Int('v2')], 2, 3, 1)
+    smt = FormulaTemplate([Int('v1'), Int('v2')], 4, 3, 2)
     smt.add([1, 2], True)
     smt.add([2, 3], False)
     print(smt.s)
     print(smt.check())
 
-    arr =smt.refine_model()
+    arr = smt.refine_model()
     for a in arr:
         print(a)
 
-    formu = smt.formula()
+    formu = smt.formula_model()
     print(formu)
     print('-' * 50)
     print(simplify(formu))

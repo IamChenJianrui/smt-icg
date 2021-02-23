@@ -2,12 +2,10 @@ from z3 import *
 
 
 class Refiner:
-    def __init__(self, vi, model_arr, feasible_region=True):
+    def __init__(self, vi):
         self.vi = vi
-        self.model_arr = model_arr
-        self.feasible_region = feasible_region
 
-    def refine_model_arr(self):
+    def generate_dnf_model(self, model_arr):
         def dfs(idx, tmp_list):
             if idx >= len(or_clause):
                 this_is_a_list.append(list(tmp_list))
@@ -18,18 +16,17 @@ class Refiner:
                 tmp_list.pop()
 
         res = []
-        for or_clause in self.model_arr:
+        for or_clause in model_arr:
             this_is_a_list = []
             dfs(0, [])
             res.extend(this_is_a_list)
         return res
 
-    def detect_contradiction(self, res):
+    def detect_contradiction(self, res, feasible_region=True):
         res_without_contra = []
         for clause in res:
-            clause.append(self.feasible_region)
             s = Solver()
-            s.add(*clause)
+            s.add(*clause, feasible_region)
             if s.check() == sat:
                 res_without_contra.append(clause)
         return res_without_contra
@@ -54,11 +51,47 @@ class Refiner:
             res_without_implic.append([expr for expr in clause if expr is not None])
         return res_without_implic
 
-    def refine(self):
-        res = self.refine_model_arr()
-        res_without_contra = self.detect_contradiction(res)
+    def refine(self, model_arr, feasible_region):
+        print('----------Original Model----------')
+        print('Or:')
+        for c1 in model_arr:
+            print('\tAnd:')
+            for c2 in c1:
+                print('\t\tOr:')
+                for c3 in c2:
+                    print('\t\t\t', c3)
+
+        res = self.generate_dnf_model(model_arr)
+        print('-'*10, 'DNF model', '-'*10)
+        print('Or:')
+        for c1 in res:
+            print('\tAnd:')
+            for c2 in c1:
+                print('\t\t', c2)
+
+        res_without_contra = self.detect_contradiction(res, feasible_region)
+        print('-' * 10, 'No Nontradiction', '-' * 10)
+        print('Or:')
+        for c1 in res_without_contra:
+            print('\tAnd:')
+            for c2 in c1:
+                print('\t\t', c2)
+
         res_without_implic = self.detect_implic(res_without_contra)
+        print('-' * 10, 'No Implication', '-' * 10)
+        print('Or:')
+        for c1 in res_without_implic:
+            print('\tAnd:')
+            for c2 in c1:
+                print('\t\t', c2)
+
         return res_without_implic
+
+    def simplify_dnf_model_arr(self, model):
+        no_contra = self.detect_contradiction(model)
+        no_implic = self.detect_implic(no_contra)
+        return no_implic
+
 
 if __name__ == '__main__':
     v1, v2 = Int('v1'), Int('v2')
@@ -68,20 +101,11 @@ if __name__ == '__main__':
              [[1 * v1 + 1 * v2 == 4],
               [1 * v1 + 1 * v2 < 3],
               [(2 * v1 + 0 * v2) % 4 == 1, (2 * v1 + 0 * v2) % 4 == 2, (2 * v1 + 0 * v2) % 4 == 3]]]
-    refiner = Refiner([v1, v2], model)
+    refiner = Refiner([v1, v2])
 
-    # res = refiner.refine_model_arr()
-    # for r in res:
-    #     print(r)
-    # print('-' * 50)
-    # res_without_contra = refiner.detect_contradiction(res)
-    # for r in res_without_contra:
-    #     print(r)
-    # print('-' * 50)
-    # res_without_implic = refiner.detect_implic(res_without_contra)
-    # for r in res_without_implic:
-    #     print(r)
-    # print('-' * 50)
-
-    res_without_implic = refiner.refine()
+    res_without_implic = refiner.refine(model, True)
     print(res_without_implic)
+    print('-' * 50)
+    model = [[Not((5*v1 + 1*v2)%6 == 0), Not((3*v1 + 3*v2)%5 == 1)], [Not((5*v1 + 1*v2)%6 == 0), Not((3*v1 + 3*v2)%5 == 1)]]
+    simplied_model = refiner.simplify_dnf_model_arr(model)
+    print(simplied_model)
