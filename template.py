@@ -1,7 +1,7 @@
 from z3 import *
 
 
-def sum(iter):
+def combine(iter):
     tmp_list = [i for i in iter]
     res = tmp_list[0]
     for i in tmp_list[1:]:
@@ -17,9 +17,10 @@ def co_prime(num1, num2):
 
 
 def gcd(*nums):
-    min_num = abs(nums[0])
-    for num in nums[1:]:
-        min_num = min(min_num, abs(num))
+    min_num = 1 << 32
+    for num in nums:
+        if num != 0:
+            min_num = min(min_num, abs(num))
     for i in range(min_num, 1, -1):
         flag = True
         for num in nums:
@@ -94,10 +95,10 @@ class FormulaTemplate:
         return check
 
     def encoding(self, example, label):
-        Equ = [sum(example[j] * self.aeij[i][j] for j in range(self.n)) != self.bi[i] for i in range(self.h)]
-        Ge = [sum(example[j] * self.aeij[i][j] for j in range(self.n)) >= self.bi[i] for i in range(self.h)]
-        Le = [sum(example[j] * self.aeij[i][j] for j in range(self.n)) <= self.bi[i] for i in range(self.h)]
-        Me = [sum(example[j] * self.amij[i][j] for j in range(self.n)) % self.ei[i] == self.ci[i] for i in
+        Equ = [combine(example[j] * self.aeij[i][j] for j in range(self.n)) != self.bi[i] for i in range(self.h)]
+        Ge = [combine(example[j] * self.aeij[i][j] for j in range(self.n)) >= self.bi[i] for i in range(self.h)]
+        Le = [combine(example[j] * self.aeij[i][j] for j in range(self.n)) <= self.bi[i] for i in range(self.h)]
+        Me = [combine(example[j] * self.amij[i][j] for j in range(self.n)) % self.ei[i] == self.ci[i] for i in
               range(self.m)]
         Tk = []
         for k in range(self.k):
@@ -153,7 +154,7 @@ class FormulaTemplate:
                 if pix == -1:
                     if am != 0:
                         pix = am
-                elif am != pix:
+                elif am != 0 and am != pix:
                     flag = False
                     break
             if flag:
@@ -186,7 +187,7 @@ class FormulaTemplate:
         for k in range(self.k):
             clause = []
             for h in range(self.h):
-                Coe = sum(self.A[h][j] * val[j] for j in range(self.n))
+                Coe = combine(self.A[h][j] * val[j] for j in range(self.n))
                 status = (self.He[k][h], self.Hge[k][h], self.Hle[k][h])
                 if status == (False, False, True):
                     clause.append(Coe <= self.B[h])
@@ -205,9 +206,9 @@ class FormulaTemplate:
             for m in range(self.m):
                 status = (self.T[k][m], self.Nt[k][m])
                 if status == (True, False):
-                    clause.append(sum(self.M[m][j] * val[j] for j in range(self.n)) % self.E[m] == self.C[m])
+                    clause.append(combine(self.M[m][j] * val[j] for j in range(self.n)) % self.E[m] == self.C[m])
                 elif status == (False, True):
-                    clause.append(sum(self.M[m][j] * val[j] for j in range(self.n)) % self.E[m] != self.C[m])
+                    clause.append(combine(self.M[m][j] * val[j] for j in range(self.n)) % self.E[m] != self.C[m])
                 elif status == (True, True):
                     clause.append(False)
             formu.append(And(*clause))
@@ -218,7 +219,7 @@ class FormulaTemplate:
         for k in range(self.k):
             clause = []
             for h in range(self.h):
-                Coe = sum(self.A[h][j] * self.vi[j] for j in range(self.n))
+                Coe = combine(self.A[h][j] * self.vi[j] for j in range(self.n))
                 status = (self.He[k][h], self.Hge[k][h], self.Hle[k][h])
                 if status == (False, False, True):
                     clause.append([Coe < self.B[h], Coe == self.B[h]])
@@ -236,12 +237,12 @@ class FormulaTemplate:
                     clause.append([False])
             for m in range(self.m):
                 status = (self.T[k][m], self.Nt[k][m])
-                Com = sum(self.M[m][j] * self.vi[j] for j in range(self.n))
+                Com = combine(self.M[m][j] * self.vi[j] for j in range(self.n))
                 if status == (True, False):
                     clause.append([Com % self.E[m] == self.C[m]])
                 elif status == (False, True):
                     mod_clause = []
-                    for i in range(self.E[m]):
+                    for i in range(int(self.E[m])):
                         if i != self.C[m]:
                             mod_clause.append(Com % self.E[m] == i)
                     clause.append(mod_clause)
