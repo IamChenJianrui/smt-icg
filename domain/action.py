@@ -1,5 +1,5 @@
 from z3 import *
-from utils.analyse_snt import analyse_snt_z3, analyse_snt_bool
+from domain.utils.analyse_snt import analyse_snt_z3, analyse_snt_bool
 
 
 class Action:

@@ -60,7 +60,7 @@ def analyse_snt_bool(word_list: list, mapper2const):
 
 if __name__ == "__main__":
     # 举个栗子
-    from utils.split import split
+    from domain.utils.split import split
 
     mapper = {"?v1": 6, "?v2": 5, "?k": 2}
 

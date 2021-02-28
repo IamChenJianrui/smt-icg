@@ -1,7 +1,7 @@
 from z3 import Int, And, Or, Exists, simplify
-from utils.split import split
-from utils.analyse_snt import analyse_snt_z3
-from action import Action
+from domain.utils.split import split
+from domain.utils.analyse_snt import analyse_snt_z3
+from domain.action import Action
 
 
 # PDDL文件解析器
@@ -9,7 +9,7 @@ class PDDLParser:
     def __init__(self, pddl_pwd):
         self.pddl2icg = {}
         self.eff_mapper = {}
-        self.variables = []
+        # self.variables = []
         self.ending_states = []
         self.constraints = None
         self.actions = []
@@ -48,7 +48,7 @@ class PDDLParser:
         self._analyse_objects(task_dict["objects"])
         self.eff_mapper = {k: Int("w%d" % i) for i, k in enumerate(self.pddl2icg)}
         print("variable mapper(pddl2icg):", self.pddl2icg)
-        print("variables:", self.variables)
+        # print("variables:", self.variables)
         print("/" * 50)
 
         print("Analysing ending states:")
@@ -78,7 +78,7 @@ class PDDLParser:
         # 解析PDDL中的变量，将其转化为Z3的变量，用列表按序存储
         for i, pddl_var in enumerate(arr):
             icg_var = Int("v%d" % i)
-            self.variables.append(icg_var)
+            # self.variables.append(icg_var)
             self.pddl2icg[pddl_var] = icg_var
 
     def _analyse_tercondition(self, arr):
