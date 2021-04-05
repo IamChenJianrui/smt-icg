@@ -269,7 +269,8 @@ class EquTemplate:
         model = self.s.model()
         V = [model[v].as_long() if model[v] is not None else 0 for v in self.vi]
         B = model[self.b].as_long() if model[self.b] is not None else 0
-        return combine(V[i] * self.vi[i] for i in range(len(self.vi))) + B
+        expr = combine(V[i] * self.vi[i] for i in range(len(self.vi))) + B
+        return simplify(expr)
 
 
 if __name__ == '__main__':
