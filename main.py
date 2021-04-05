@@ -1,6 +1,5 @@
 from domain.parser import PDDLParser
-from generator import FormulaGenerator, StrategyGenerator
-from domain.utils.refiner import Refiner
+from generator import Generator
 from z3 import simplify
 import time
 import os
@@ -10,19 +9,16 @@ if __name__ == '__main__':
     start = time.time()
     # domain = PDDLParser("./pddl/Empty_and_divide.pddl")
     domain = PDDLParser("./pddl/two_piled_nim.pddl")
-    gen = FormulaGenerator(domain)
-    formula_template = gen.generate()
+    gen = Generator(domain)
+    formula_template = gen.generate_formula()
     formula = simplify(formula_template.formula_model())
     print('*'*50)
     print('N-formula:\n\t %s' % formula)
 
-    model = formula_template.refine_model()
-    refiner_model = Refiner(list(domain.pddl2icg.values())).refine(model, domain.feasible_region)
-    print('*' * 50)
-    print('refined model:', refiner_model)
+    gen.generate_strategy()
 
-    sgen = StrategyGenerator(domain, formula_template, refiner_model)
-    sgen.generate()
+    # sgen = StrategyGenerator(domain, formula_template, refiner_model)
+    # sgen.generate()
 
     # if not os.path.exists("./log"):
     #     os.mkdir("./log")

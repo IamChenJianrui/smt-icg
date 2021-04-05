@@ -66,7 +66,7 @@ class FormulaTemplate:
         # 余数c_i必须小于模e
         self.s.add(*[And(self.ei[i] > self.ci[i], self.ci[i] >= 0) for i in range(m)])
         # 模必须大于等于2，并且小于一定范围
-        self.s.add(*[And (e <= 2 * m, e >= 2) for e in self.ei])
+        self.s.add(*[And(e <= 2 * m, e >= 2) for e in self.ei])
         for i in range(k):
             # 判断条件一定有一个是False，避免逻辑出现False
             # self.s.add(*[Not(And(self.heij[i][j], self.hgeij[i][j], self.hleij[i][j])) for j in range(h)])
@@ -75,13 +75,12 @@ class FormulaTemplate:
                 all_true = [And(self.heij[i][w], self.hgeij[i][w], self.hleij[i][w]) for w in range(h)]
                 all_true.extend([And(self.tij[i][w], self.ntij[i][w]) for w in range(m)])
                 struct_const = [Or(self.heij[i][w] != self.heij[j][w],
-                                    self.hgeij[i][w] != self.hgeij[j][w],
-                                    self.hleij[i][w] != self.hleij[j][w]) for w in range(h)]
+                                   self.hgeij[i][w] != self.hgeij[j][w],
+                                   self.hleij[i][w] != self.hleij[j][w]) for w in range(h)]
                 struct_const.extend([Or(self.tij[i][w] != self.tij[j][w],
-                                         self.ntij[i][w] != self.ntij[j][w]) for w in range(m)])
+                                        self.ntij[i][w] != self.ntij[j][w]) for w in range(m)])
 
                 self.s.add(Or(*struct_const, *all_true))
-
 
         self.s.set("timeout", timeout)
 
@@ -251,21 +250,50 @@ class FormulaTemplate:
             formu_arr.append(clause)
         return formu_arr
 
+
+class EquTemplate:
+    def __init__(self, n):
+        self.vi = [Int('v' + str(i)) for i in range(n)]
+        self.b = Int('b')
+        self.s = Solver()
+
+    def add(self, vector):
+        vi, target = vector[:-1], vector[-1]
+        expr = combine(vi[i] * self.vi[i] for i in range(len(self.vi))) + self.b == target
+        self.s.add(expr)
+
+    def check(self):
+        return self.s.check()
+
+    def solve_model(self):
+        model = self.s.model()
+        V = [model[v].as_long() if model[v] is not None else 0 for v in self.vi]
+        B = model[self.b].as_long() if model[self.b] is not None else 0
+        return combine(V[i] * self.vi[i] for i in range(len(self.vi))) + B
+
+
 if __name__ == '__main__':
-    smt = FormulaTemplate([Int('v1'), Int('v2')], 4, 3, 2)
-    smt.add([1, 2], True)
-    smt.add([2, 3], False)
-    print(smt.s)
-    print(smt.check())
+    # smt = FormulaTemplate([Int('v1'), Int('v2')], 4, 3, 2)
+    # smt.add([1, 2], True)
+    # smt.add([2, 3], False)
+    # print(smt.s)
+    # print(smt.check())
+    #
+    # arr = smt.refine_model()
+    # for a in arr:
+    #     print(a)
+    #
+    # formu = smt.formula_model()
+    # print(formu)
+    # print('-' * 50)
+    # print(simplify(formu))
+    # print('-' * 50)
 
-    arr = smt.refine_model()
-    for a in arr:
-        print(a)
-
-    formu = smt.formula_model()
-    print(formu)
-    print('-' * 50)
-    print(simplify(formu))
-    print('-' * 50)
-
-
+    smt = EquTemplate(2)
+    smt.add([1, 2, 6])
+    smt.add([2, 1, 5])
+    smt.add([2, 2, 7])
+    if smt.check() == sat:
+        print(smt.solve_model()) # 1*v0 + 2*v1 + 1
+    else:
+        print(unsat)
