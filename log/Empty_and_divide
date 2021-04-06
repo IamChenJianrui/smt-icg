@@ -1,17 +1,4 @@
 
-N-formula:	 Or(And((2*v0 + v1)%4 == 1, v1%4 == 1),
-                And(Not((2*v0 + v1)%4 == 1), Not(v1%4 == 1)))
-time cost:	 11.618026733398438
-strategies:	 [(And((2*v0 + v1)%4 == 0, v1%4 == 0), 'empty1', 1),
-              (And((2*v0 + v1)%4 == 0, v1%4 == 0), 'empty2', 1),
-              (And((2*v0 + v1)%4 == 0, v1%4 == 2), 'empty1', 1),
-              (And((2*v0 + v1)%4 == 2, v1%4 == 0), 'empty1', 1),
-              (And((2*v0 + v1)%4 == 2, v1%4 == 2), 'empty1', 1),
-              (And((2*v0 + v1)%4 == 2, v1%4 == 2), 'empty2', 1),
-              (And((2*v0 + v1)%4 == 3, v1%4 == 3), 'empty2', 1),
-              (And((2*v0 + v1)%4 == 1, v1%4 == 1), 'empty2', 1)]
-time cost:	 13.91461968421936
-
 N-formula:	 Or(v1%2 == 0, v0%2 == 0)
 time cost:	 0.6420319080352783
 strategies:	 [(v1%2 == 0, 'empty1', 1), (v0%2 == 0, 'empty2', 1)]
@@ -26,3 +13,8 @@ N-formula:	 Or(v1%2 == 0, v0%2 == 0)
 time cost:	 0.6083731651306152
 strategies:	 [(v1%2 == 0, 'empty1', 1), (v0%2 == 0, 'empty2', 1)]
 time cost:	 1.154409408569336
+
+N-formula:	 Or(Not(v0%2 == 1), v1%2 == 0)
+time cost:	 54.02767992019653
+strategies:	 [(v0%2 == 0, 'empty2', 1), (v1%2 == 0, 'empty1', 1)]
+time cost:	 54.538424491882324

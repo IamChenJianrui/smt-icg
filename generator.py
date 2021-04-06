@@ -151,13 +151,28 @@ class Generator:
                 else:
                     print("condition2 sat.")
                     break
-
             print('generating formula...')
             check = self.formula_template.check()
             if check == unknown:
                 raise RuntimeError("z3 solver running out of time")
             elif check == unsat:
-                print('extending...')
+                print('###unsat, extending...')
+                return self.generate_formula(idx + 1)
+            if len(self.p_set) > 5 * len(self.n_set):
+                print('###extending...')
+                for s in self.n_demo:
+                    if s not in self.n_set:
+                        self.n_set.add(s)
+                        if len(self.p_set) < 2 * len(self.n_set):
+                            break
+                return self.generate_formula(idx + 1)
+            if len(self.n_set) > 5 * len(self.p_set):
+                print('###extending...')
+                for s in self.p_demo:
+                    if s not in self.p_set:
+                        self.p_set.add(s)
+                        if len(self.n_set) < 2 * len(self.p_set):
+                            break
                 return self.generate_formula(idx + 1)
         return self.formula_template
 
