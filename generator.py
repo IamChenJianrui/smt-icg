@@ -1,5 +1,4 @@
-from domain.utils.analyse_snt import analyse_snt_z3
-from template import FormulaTemplate, combine, EquTemplate
+from template import FormulaTemplate, EquTemplate
 from domain.utils.refiner import Refiner
 from z3 import *
 from random import randint
@@ -222,7 +221,7 @@ class Generator:
         strategies = []
         for cover_list in refiner_model:
             cover = simplify(And(*cover_list))
-            print("cover:", cover)
+            print('-' * 50, "\ncover:", cover)
             for action in self.domain.actions:
                 flag, demo = False, dict()
                 for i in range(5):  # 生成5个用例
@@ -238,11 +237,10 @@ class Generator:
                 if flag:
                     continue
 
-                print(action.name, demo)
-
                 eff_var = list(self.domain.eff_mapper.values())
 
                 while True:
+                    print(action.name, demo)
                     state_list = list(demo.keys())
                     param_expr = self.generate_param(state_list, demo, [])
                     print("param of action:", param_expr)
@@ -253,7 +251,6 @@ class Generator:
                     free_p = list(action.params_mapper.values())[0]  # 动作的参数
                     s = Solver()
                     s.add(self.domain.constraints, free_p == param_expr, Not(const))
-                    # print(s)
                     if s.check() == sat:
                         model = s.model()
                         example = [model[self.formula_template.vi[i]].as_long()
@@ -263,106 +260,11 @@ class Generator:
                         print(model)
                         print("find a counterexample:", example)
                         params = [param[0] for param in self.gen_eff2(example, action)]
-                        demo[example] = [k for k in params]
+                        if len(params) > 0:
+                            demo[example] = [k for k in params]
+                        else:
+                            break
                     else:
                         strategies.append((cover, action.name, param_expr))
                         break
         return strategies
-
-# class StrategyGenerator:
-#     def __init__(self, domain, formula_tmp, covers):
-#         self.domain = domain
-#         self.formula_tmp = formula_tmp
-#         self.covers = covers
-#
-#     def formula_generate_strategy(self, action, cover, param_dict, formula):
-#         def mapper(key):
-#             if key[0] == '?':
-#                 if key in self.domain.pddl2icg:
-#                     return self.domain.pddl2icg[key]
-#                 elif key in self.domain.eff_mapper:
-#                     return self.domain.eff_mapper[key]
-#                 elif key in param_dict:
-#                     return param_dict[key]
-#                 else:
-#                     raise RuntimeError("Variable %s doesn't exists!" % key)
-#             else:
-#                 return int(key)
-#
-#         pre_cond = analyse_snt_z3(action.precond_list, mapper)
-#
-#         trans_f = pre_cond
-#         for eff in action.effect_list:
-#             assert len(eff) == 3
-#             eff_var = self.domain.eff_mapper[eff[1]]
-#             assign = analyse_snt_z3(eff[2], mapper)
-#             if eff[0] is True:
-#                 trans_f = And(trans_f, eff_var == assign)
-#             else:
-#                 cond = analyse_snt_z3(eff[0], mapper)
-#                 trans_f = And(trans_f, If(cond, eff_var == assign, eff_var == self.domain.pddl2icg[eff[1]]))
-#
-#         # f = ForAll(list(self.domain.pddl2icg.values()),
-#         #            Implies(And(cover, pre_cond),
-#         #                    And(pre_cond,
-#         #                        ForAll(list(self.domain.eff_mapper.values()),
-#         #                           Implies(trans_f, Not(formula))))))
-#
-#         f = ForAll(list(self.domain.pddl2icg.values()),
-#                    Implies(pre_cond,
-#                            Implies(cover,
-#                                    ForAll(list(self.domain.eff_mapper.values()),
-#                                           And(trans_f, Not(formula))))))
-#
-#         # eff_list = []
-#         # for eff in action.effect_list:
-#         #     assert len(eff) == 3
-#         #     eff_var = self.domain.eff_mapper[eff[1]]
-#         #     assign = analyse_snt_z3(eff[2], mapper)
-#         #     if eff[0] is True:
-#         #         eff_list.append(eff_var == assign)
-#         #     else:
-#         #         cond = analyse_snt_z3(eff[0], mapper)
-#         #         eff_list.append(If(cond, eff_var == assign, eff_var == self.domain.pddl2icg[eff[1]]))
-#         #
-#         # f = ForAll(list(self.domain.pddl2icg.values()),
-#         #            Implies(cover,
-#         #                    ForAll(list(self.domain.eff_mapper.values()),
-#         #                           And(pre_cond,
-#         #                                   And(And(*eff_list), Not(formula))))))
-#
-#         return simplify(f)
-#
-#     def get_value_of_param(self, model, params_list, k_list):
-#         for i in range(len(params_list)):
-#             print('parma:', params_list[i])
-#             for k in k_list[i]:
-#                 print(model[k], end=', ')
-#             print()
-#
-#     def generate(self):
-#         for cover_list in self.covers:
-#             for action in self.domain.actions:
-#                 cover = simplify(And(*cover_list))
-#                 m, n = len(self.domain.pddl2icg) + 1, len(action.params_mapper)
-#                 k_placehold = [[Int('k%d%d' % (j, i)) for i in range(m)] for j in range(n)]
-#                 varlist = [*self.domain.pddl2icg.values(), 1]
-#                 paramlist = list(action.params_mapper.keys())
-#                 param_expr_list = [combine(k_placehold[i][j] * varlist[j] for j in range(m)) for i in range(n)]
-#                 param_dict = dict(zip(paramlist, param_expr_list))
-#                 winning_formula = self.formula_tmp.formula_model(*self.domain.eff_mapper.values())
-#                 gen_formula = self.formula_generate_strategy(action, cover, param_dict, winning_formula)
-#
-#                 print('-' * 50)
-#                 print('cover:', cover)
-#                 print('action:', action.name)
-#                 print(gen_formula)
-#                 s = Solver()
-#                 # s.set("timeout", 600000)
-#                 s.add(gen_formula)
-#                 if s.check() == sat:
-#                     # self.get_value_of_param(s.model(), paramlist, k_placehold)
-#                     print(s.model())
-#                     break
-#                 else:
-#                     print('action fail')
