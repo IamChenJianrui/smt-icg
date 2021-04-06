@@ -74,10 +74,11 @@ class Generator:
         for state in self.n_set:
             self.formula_template.add(state, True)
         if self.formula_template.check() == unsat:
+            print("###unsat, extending...")
             return self.generate_formula(idx + 1)
 
         while True:
-            print("SP:", self.p_set)
+            print("\nSP:", self.p_set)
             print("SN:", self.n_set)
             nf = self.formula_template.formula_model()
             a_nf = self.formula_template.formula_model(*eff_var)
@@ -158,7 +159,7 @@ class Generator:
             elif check == unsat:
                 print('###unsat, extending...')
                 return self.generate_formula(idx + 1)
-            if len(self.p_set) > 5 * len(self.n_set):
+            if len(self.p_set) > 4 * len(self.n_set):
                 print('###extending...')
                 for s in self.n_demo:
                     if s not in self.n_set:
@@ -166,7 +167,7 @@ class Generator:
                         if len(self.p_set) < 2 * len(self.n_set):
                             break
                 return self.generate_formula(idx + 1)
-            if len(self.n_set) > 5 * len(self.p_set):
+            if len(self.n_set) > 4 * len(self.p_set):
                 print('###extending...')
                 for s in self.p_demo:
                     if s not in self.p_set:

@@ -1,30 +1,25 @@
 
-N-formula:	 Or(v1%2 == 0, v0%2 == 0)
-time cost:	 0.6420319080352783
-strategies:	 [(v1%2 == 0, 'empty1', 1), (v0%2 == 0, 'empty2', 1)]
-time cost:	 1.1856119632720947
+N-formula:	 Or(v1%2 == 0, And(Not((v0 + v1)%2 == 0), Not(v1%2 == 0)))
+time cost:	 0.27207231521606445
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And((v0 + v1)%2 == 1, v1%2 == 1), 'empty2', 1)]
+time cost:	 0.9075376987457275
 
-N-formula:	 Or(v1%2 == 0, v0%2 == 0)
-time cost:	 0.9218275547027588
-strategies:	 [(v1%2 == 0, 'empty1', 1), (v0%2 == 0, 'empty2', 1)]
-time cost:	 1.5262415409088135
+N-formula:	 Or(v1%2 == 0, And(Not((v0 + v1)%2 == 0), Not(v1%2 == 0)))
+time cost:	 0.2274184226989746
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And((v0 + v1)%2 == 1, v1%2 == 1), 'empty2', 1)]
+time cost:	 0.8533546924591064
 
-N-formula:	 Or(v1%2 == 0, v0%2 == 0)
-time cost:	 0.6083731651306152
-strategies:	 [(v1%2 == 0, 'empty1', 1), (v0%2 == 0, 'empty2', 1)]
-time cost:	 1.154409408569336
+N-formula:	 Or(v1%2 == 0, And(Not((v0 + v1)%2 == 0), Not(v1%2 == 0)))
+time cost:	 0.3348808288574219
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And((v0 + v1)%2 == 1, v1%2 == 1), 'empty2', 1)]
+time cost:	 1.1821284294128418
 
-N-formula:	 Or(Not(v0%2 == 1), v1%2 == 0)
-time cost:	 54.02767992019653
-strategies:	 [(v0%2 == 0, 'empty2', 1), (v1%2 == 0, 'empty1', 1)]
-time cost:	 54.538424491882324
+N-formula:	 Or(v1%2 == 0, And(Not((v0 + v1)%2 == 0), Not(v1%2 == 0)))
+time cost:	 0.21872830390930176
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And((v0 + v1)%2 == 1, v1%2 == 1), 'empty2', 1)]
+time cost:	 0.8279695510864258
 
-N-formula:	 Or(Not(v0%2 == 1), v1%2 == 0)
-time cost:	 51.342586278915405
-strategies:	 [(v0%2 == 0, 'empty2', 1), (v1%2 == 0, 'empty1', 1)]
-time cost:	 51.87105846405029
-
-N-formula:	 Or((v0 + v1)%2 == 1, v0%2 == 0)
-time cost:	 55.76475787162781
-strategies:	 [(v0%2 == 0, 'empty2', 1)]
-time cost:	 56.22834348678589
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.3280179500579834
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And((v0 + v1)%2 == 1, Not(v1%2 == 0)), 'empty2', 1)]
+time cost:	 0.9216258525848389

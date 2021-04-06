@@ -51,6 +51,22 @@ class Refiner:
             res_without_implic.append([expr for expr in clause if expr is not None])
         return res_without_implic
 
+    def detect_union(self, res):
+        def exist_union(expr1, expr2):
+            s = Solver()
+            s.add(expr1, expr2)
+            return s.check() == sat
+
+        res_without_union = []
+        for i in range(len(res)):
+            expr1 = And(*res[i])
+            for j in range(i):
+                expr2 = And(*res[j])
+                if exist_union(expr1, expr2):
+                    res[i].append(Not(expr2))
+            res_without_union.append(res[i])
+        return res_without_union
+
     def refine(self, model_arr, feasible_region):
         print('----------Original Model----------')
         print('Or:')
@@ -62,7 +78,7 @@ class Refiner:
                     print('\t\t\t', c3)
 
         res = self.generate_dnf_model(model_arr)
-        print('-'*10, 'DNF model', '-'*10)
+        print('-' * 10, 'DNF model', '-' * 10)
         print('Or:')
         for c1 in res:
             print('\tAnd:')
@@ -85,7 +101,15 @@ class Refiner:
             for c2 in c1:
                 print('\t\t', c2)
 
-        return res_without_implic
+        res_without_union = self.detect_union(res_without_implic)
+        print('-' * 10, 'No Union', '-' * 10)
+        print('Or:')
+        for c1 in res_without_union:
+            print('\tAnd:')
+            for c2 in c1:
+                print('\t\t', c2)
+
+        return res_without_union
 
     def simplify_dnf_model_arr(self, model):
         no_contra = self.detect_contradiction(model)
@@ -103,9 +127,14 @@ if __name__ == '__main__':
               [(2 * v1 + 0 * v2) % 4 == 1, (2 * v1 + 0 * v2) % 4 == 2, (2 * v1 + 0 * v2) % 4 == 3]]]
     refiner = Refiner([v1, v2])
 
-    res_without_implic = refiner.refine(model, True)
-    print(res_without_implic)
+    res_without_union = refiner.refine(model, True)
+    print(res_without_union)
     print('-' * 50)
-    model = [[Not((5*v1 + 1*v2)%6 == 0), Not((3*v1 + 3*v2)%5 == 1)], [Not((5*v1 + 1*v2)%6 == 0), Not((3*v1 + 3*v2)%5 == 1)]]
+    model = [[Not((5 * v1 + 1 * v2) % 6 == 0), Not((3 * v1 + 3 * v2) % 5 == 1)],
+             [Not((5 * v1 + 1 * v2) % 6 == 0), Not((3 * v1 + 3 * v2) % 5 == 1)]]
     simplied_model = refiner.simplify_dnf_model_arr(model)
     print(simplied_model)
+
+    model = [[v1 % 2 == 0], [v2 % 2 == 0]]
+    res = refiner.detect_union(model)
+    print(res)

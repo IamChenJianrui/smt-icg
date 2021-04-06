@@ -61,16 +61,15 @@ class FormulaTemplate:
             self.s.add(Or(*[am > 0 for am in self.amij[i]]))
             # 模等式的系数am_ij不能大于模e
             self.s.add(*[And(0 <= am, am < self.ei[i]) for am in self.amij[i]])
-            for j in range(i + 1, m):
-                self.s.add(Or(*[self.amij[i][w] != self.amij[j][w] for w in range(m)]))
+            # for j in range(i + 1, m):
+            #     self.s.add(Or(self.ei[i] != self.ei[j],
+            #         *[self.amij[i][w] != self.amij[j][w] for w in range(n)]))
         # 余数c_i必须小于模e
         self.s.add(*[And(self.ei[i] > self.ci[i], self.ci[i] >= 0) for i in range(m)])
         # 模必须大于等于2，并且小于一定范围
-        self.s.add(*[And(e <= 2 * m, e >= 2) for e in self.ei])
+        self.s.add(*[And(e <= 4 * m, e >= 2) for e in self.ei])
         for i in range(k):
             # 判断条件一定有一个是False，避免逻辑出现False
-            # self.s.add(*[Not(And(self.heij[i][j], self.hgeij[i][j], self.hleij[i][j])) for j in range(h)])
-            # self.s.add(*[Not(And(self.tij[i][j], self.ntij[i][j])) for j in range(m)])
             for j in range(i + 1, k):
                 all_true = [And(self.heij[i][w], self.hgeij[i][w], self.hleij[i][w]) for w in range(h)]
                 all_true.extend([And(self.tij[i][w], self.ntij[i][w]) for w in range(m)])
