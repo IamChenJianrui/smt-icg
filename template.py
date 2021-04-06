@@ -291,10 +291,10 @@ if __name__ == '__main__':
     # print('-' * 50)
 
     smt = EquTemplate(2)
-    smt.add([1, 2, 6])
-    smt.add([2, 1, 5])
-    smt.add([2, 2, 7])
+    smt.add([0, 1, 1])
+    smt.add([1, 2, 1])
+    smt.add([3, 6, 3])
     if smt.check() == sat:
-        print(smt.solve_model()) # 1*v0 + 2*v1 + 1
+        print(smt.solve_model())  # 1*v0 + 2*v1 + 1
     else:
         print(unsat)

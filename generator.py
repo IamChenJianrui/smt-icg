@@ -192,6 +192,26 @@ class Generator:
                             if not self.check_np(res):
                                 yield param, action.name, res
 
+    def generate_param(self, state_list, demo, rec):
+        if len(state_list) == 0:
+            rqu_template = EquTemplate(len(self.domain.pddl2icg))
+            for s in rec:
+                rqu_template.add(s)
+            if rqu_template.check() == sat:
+                return rqu_template.solve_model()
+            return None
+        tmp = []
+        tmp.extend(state_list[0])
+        for b in demo[state_list[0]]:
+            tmp.append(b)
+            rec.append(tmp)
+            res = self.generate_param(state_list[1:], demo, rec)
+            if res is not None:
+                return res
+            rec.pop()
+            tmp.pop()
+        return None
+
     def generate_strategy(self):
         model = self.formula_template.refine_model()
         refiner_model = Refiner(
@@ -205,7 +225,7 @@ class Generator:
             print("cover:", cover)
             for action in self.domain.actions:
                 flag, demo = False, dict()
-                for i in range(5): # 生成5个用例
+                for i in range(5):  # 生成5个用例
                     self.gen_example_of_cover(cover, demo)
                 state_list = list(demo.keys())
                 for state in state_list:
@@ -222,35 +242,32 @@ class Generator:
 
                 eff_var = list(self.domain.eff_mapper.values())
 
-                def const(cover, a_nf):
-                    return Implies(cover, ForAll(eff_var, Not(a_nf)))
+                while True:
+                    state_list = list(demo.keys())
+                    param_expr = self.generate_param(state_list, demo, [])
+                    print("param of action:", param_expr)
 
-                def dfs(state_list, rec):
-                    if len(state_list) == 0:
-                        rqu_template = EquTemplate(len(self.domain.pddl2icg))
-                        for s in rec:
-                            rqu_template.add(s)
-                        if rqu_template.check() == sat:
-                            strat = rqu_template.solve_model()
-                            print(strat)
-                        else:
-                            print(unsat)
-                        return
-                    tmp = []
-                    tmp.extend(state_list[0])
-                    for b in demo[state_list[0]]:
-                        tmp.append(b)
-                        rec.append(tmp)
-                        dfs(state_list[1:], rec)
-                        rec.pop()
-                        tmp.pop()
-
-                dfs(state_list, [])
-
-
-
-
-
+                    tf = action.trans_formula()
+                    wf = self.formula_template.formula_model(*eff_var)
+                    const = simplify(Implies(cover, ForAll(eff_var, Implies(tf, Not(wf)))))
+                    free_p = list(action.params_mapper.values())[0]  # 动作的参数
+                    s = Solver()
+                    s.add(self.domain.constraints, free_p == param_expr, Not(const))
+                    # print(s)
+                    if s.check() == sat:
+                        model = s.model()
+                        example = [model[self.formula_template.vi[i]].as_long()
+                                   if model[self.formula_template.vi[i]] is not None
+                                   else 0 for i in range(self.formula_template.n)]
+                        example = tuple(example)
+                        print(model)
+                        print("find a counterexample:", example)
+                        params = [param[0] for param in self.gen_eff2(example, action)]
+                        demo[example] = [k for k in params]
+                    else:
+                        strategies.append((cover, action.name, param_expr))
+                        break
+        return strategies
 
 # class StrategyGenerator:
 #     def __init__(self, domain, formula_tmp, covers):
