@@ -101,15 +101,17 @@ class Refiner:
             for c2 in c1:
                 print('\t\t', c2)
 
-        res_without_union = self.detect_union(res_without_implic)
-        print('-' * 10, 'No Union', '-' * 10)
-        print('Or:')
-        for c1 in res_without_union:
-            print('\tAnd:')
-            for c2 in c1:
-                print('\t\t', c2)
+        # res_without_union = self.detect_union(res_without_implic)
+        # print('-' * 10, 'No Union', '-' * 10)
+        # print('Or:')
+        # for c1 in res_without_union:
+        #     print('\tAnd:')
+        #     for c2 in c1:
+        #         print('\t\t', c2)
+        #
+        # return res_without_union
 
-        return res_without_union
+        return res_without_implic
 
     def simplify_dnf_model_arr(self, model):
         no_contra = self.detect_contradiction(model)

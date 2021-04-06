@@ -139,6 +139,8 @@ class Action:
         if self.precond_list[0] == 'and':
             params_range_of_each_clause = {k: [0, 1 << 32] for k in self.params_mapper}
             for snt_list in self.precond_list[1:]:
+                if type(snt_list[1]) == list:
+                    pass
                 if snt_list[1] in self.params_mapper:
                     res = analyse_snt_bool(snt_list[2], mapper)
                     param = snt_list[1]

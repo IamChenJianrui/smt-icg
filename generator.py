@@ -229,13 +229,15 @@ class Generator:
 
     def generate_strategy(self):
         model = self.formula_template.refine_model()
-        refiner_model = Refiner(
-            list(self.domain.pddl2icg.values())).refine(model, self.domain.feasible_region)
+        refiner = Refiner(list(self.domain.pddl2icg.values()))
+        refiner_model = refiner.refine(model, self.domain.feasible_region)
         print('*' * 50)
         print('refined model:', refiner_model)
 
         strategies = []
-        for cover_list in refiner_model:
+        cover_idx = 0
+        while cover_idx < len(refiner_model):
+            cover_list = refiner_model[cover_idx]
             cover = simplify(And(*cover_list))
             print('-' * 50, "\ncover:", cover)
             for action in self.domain.actions:
@@ -250,7 +252,7 @@ class Generator:
                     else:
                         flag = True
                         break
-                if flag:
+                if flag:  # 找不到后继状态中的P状态
                     continue
 
                 eff_var = list(self.domain.eff_mapper.values())
@@ -282,5 +284,19 @@ class Generator:
                             break
                     else:
                         strategies.append((cover, action.name, param_expr))
+                        flag = True
                         break
+                if flag:
+                    break
+            # 遍历完了action也没有找到策略
+            if len(strategies) == cover_idx:
+                print("cover fail to generate strategy")
+                for i in range(len(refiner_model)):
+                    if i != cover_idx:
+                        s = Solver()
+                        s.add(cover, And(*refiner_model[i]))
+                        if s.check() == sat:
+                            refiner_model[cover_idx].append(Not(And(*refiner_model[i])))
+            else:
+                cover_idx += 1
         return strategies
