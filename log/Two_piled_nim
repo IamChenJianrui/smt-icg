@@ -1,0 +1,5 @@
+
+N-formula:	 Not(v0 + -1*v1 == 0)
+time cost:	 0.13759732246398926
+strategies:	 [(Not(0 <= v0 + -1*v1), 'take2', -1*v0 + v1), (Not(v0 + -1*v1 <= 0), 'take1', v0 + -1*v1)]
+time cost:	 0.8078067302703857
