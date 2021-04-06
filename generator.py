@@ -58,7 +58,7 @@ class Generator:
         return False
 
     def generate_formula(self, idx=0):
-        print(tmp_size[idx])
+        print("\n\nsize:", tmp_size[idx])
         self.formula_template = FormulaTemplate(list(self.domain.pddl2icg.values()), *tmp_size[idx])
 
         eff_var = list(self.domain.eff_mapper.values())
@@ -77,7 +77,7 @@ class Generator:
             return self.generate_formula(idx + 1)
 
         while True:
-            print("\n\nSP:", self.p_set)
+            print("SP:", self.p_set)
             print("SN:", self.n_set)
             nf = self.formula_template.formula_model()
             a_nf = self.formula_template.formula_model(*eff_var)
