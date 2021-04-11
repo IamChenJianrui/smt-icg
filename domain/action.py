@@ -138,20 +138,21 @@ class Action:
         k_set = set()
         k = list(self.params_mapper.keys())[0]
         precond = analyse_snt_z3(self.precond_list, mapper)
-        if precond is True:
+        if str(precond) == 'True':
             return None, None, True
-        elif precond is False:
+        elif str(precond) == 'False':
             return None, None, False
 
         s = Solver()
         s.add(precond)
         while s.check() == sat:
+            # print('s:', s)
+            # print('model:', s.model())
             param = s.model()[self.params_mapper[k]].as_long()
             k_set.add(param)
             s.add(self.params_mapper[k] != param)
 
         return k, k_set, True
-
 
         # res_params = {k: [] for k in self.params_mapper}
         # if self.precond_list[0] == 'and':
@@ -189,9 +190,13 @@ class Action:
         #         analyse_snt_bool(self.precond_list[2], mapper))
         # return res_params
 
+
 if __name__ == '__main__':
-    word_list = ['take', ':parameters', ['?k'], ':precondition', ['and', ['>=', '?v', '?k'], ['or', ['=', '?k', '1'], ['=', '?k', '2'], ['=', '?k', '4']]], ':effect', ['assign', '?v', ['-', '?v', '?k']]]
-    var_mapper = {'?v': Int('v0')}
+    word_list = ['take1',
+                  ':parameters', ['?k'],
+                  ':precondition', ['or', ['and', ['=', '?k', '1'], ['>', '?v1', '0']], ['and', ['=', '?k', '2'], ['>', '?v1', '1']]],
+                  ':effect', ['assign', '?v1', ['-', '?v1', '?k']]]
+    var_mapper = {'?v1': Int('v0'), '?v2': Int('v1')}
     eff_mapper = {k: Int("w%d" % i) for i, k in enumerate(var_mapper)}
     action = Action(word_list, var_mapper, eff_mapper)
-    print(action.get_all_params({'?v': 3}))
+    print(action.get_all_params({'?v1': 3, '?v2': 5}))

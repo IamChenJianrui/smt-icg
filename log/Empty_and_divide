@@ -33,3 +33,23 @@ N-formula:	 Or(Not(v1%2 == 1), (v0 + v1)%2 == 1)
 time cost:	 19.560087203979492
 strategies:	 [(And((v0 + v1)%2 == 1, Not(v1%2 == 0)), 'empty2', 1), (v1%2 == 0, 'empty1', 1)]
 time cost:	 20.109970569610596
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.18179082870483398
+strategies:	 [(v1%2 == 0, 'empty1', 1)]
+time cost:	 1.7201142311096191
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.18275666236877441
+strategies:	 [(v1%2 == 0, 'empty1', 1)]
+time cost:	 1.6738054752349854
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.19305801391601562
+strategies:	 [(v1%2 == 0, 'empty1', 1)]
+time cost:	 2.044105291366577
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.18339943885803223
+strategies:	 [(v1%2 == 0, 'empty1', 1)]
+time cost:	 1.8570020198822021

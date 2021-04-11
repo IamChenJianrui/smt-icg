@@ -1,8 +1,8 @@
 (define (domain Subtraction_game)
-    (:constants ?a 1 ?b 2 ?c 4)
+    (:constants ?a 1 ?b 2 ?c 5)
     (:objects ?v)
     (:type normal)
-    (:tercondition (and (>= ?v 0) (< ?v 1) ))
+    (:tercondition (= ?v 0))
     (:constraint (>= ?v 0))
     (:action take
         :parameters (?k)

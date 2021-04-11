@@ -45,13 +45,14 @@ class PDDLParser:
             print("%s: %s" % (k, v))
         print("/" * 100)
 
-        print("Analysing constants:")
-        self._analyse_constants(task_dict["constants"])
-        print(self.constant_mapper)
-        self._replace_constant(task_dict["tercondition"])
-        self._replace_constant(task_dict["constraint"])
-        self._replace_constant(task_dict["action"])
-        print("/" * 50)
+        if "constants" in task_dict:
+            print("Analysing constants:")
+            self._analyse_constants(task_dict["constants"])
+            print(self.constant_mapper)
+            self._replace_constant(task_dict["tercondition"])
+            self._replace_constant(task_dict["constraint"])
+            self._replace_constant(task_dict["action"])
+            print("/" * 50)
 
         print("Analysing objects:")
         self._analyse_objects(task_dict["objects"])
@@ -73,6 +74,7 @@ class PDDLParser:
         self.feasible_region = self._feasible_region(task_dict["constraint"][0])
         print(self.feasible_region)
         print("/" * 50)
+
 
         print("Analysing constraint:")
         self.constraints = self._analyse_constraint(task_dict["constraint"][0])

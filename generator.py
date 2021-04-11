@@ -4,7 +4,7 @@ from z3 import *
 from random import randint
 
 tmp_size = [(1, 1, 0), (1, 0, 1), (1, 0, 2), (1, 1, 1), (2, 0, 1),
-            (2, 0, 2), (2, 1, 1), (2, 2, 1), (2, 1, 2), (2, 1, 4)]
+            (2, 0, 2), (2, 1, 1), (2, 2, 1), (2, 1, 2), (2, 1, 4), (4, 1, 4)]
 
 
 class Generator:
@@ -37,8 +37,8 @@ class Generator:
         var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
         for action in self.domain.actions:
             param, param_set, ok = action.get_all_params(var_dict)
-            if ok :
-                if len(param_set) > 0:
+            if ok:
+                if param_set is not None and len(param_set) > 0:
                     for k in param_set:
                         param_dict = {param: k}
                         eff_dict = action.get_eff(var_dict, param_dict)
@@ -49,15 +49,6 @@ class Generator:
                     eff_dict = action.get_eff(var_dict, param_dict)
                     if eff_dict is not None:
                         yield self.get_state_tuple(eff_dict)
-
-            # for k, range_list in action.get_all_params(var_dict).items():
-            #     for param_range in range_list:
-            #         if param_range[0] <= param_range[1]:
-            #             for param in range(param_range[0], param_range[1] + 1):
-            #                 param_dict = {k: param}
-            #                 eff_dict = action.get_eff(var_dict, param_dict)
-            #                 if eff_dict is not None:
-            #                     yield self.get_state_tuple(eff_dict)
 
     def check_np(self, state):
         if state in self.p_demo:
@@ -126,10 +117,10 @@ class Generator:
                                         self.p_set.add(eff)
                                         break
                                 elif not bool(self.formula_template.formula_model(*eff)):
-                                        print("find an eff", eff, ", which belongs to N-state.")
-                                        self.formula_template.add(eff, False)
-                                        self.p_set.add(eff)
-                                        break
+                                    print("find an eff", eff, ", which belongs to N-state.")
+                                    self.formula_template.add(eff, False)
+                                    self.p_set.add(eff)
+                                    break
                         break
                     except RecursionError:
                         print('this example is to large')
@@ -165,10 +156,10 @@ class Generator:
                                             self.n_set.add(eff)
                                             break
                                     elif bool(self.formula_template.formula_model(*eff)):
-                                            print("find an eff", eff, ", which belongs to N-state.")
-                                            self.formula_template.add(eff, True)
-                                            self.n_set.add(eff)
-                                            break
+                                        print("find an eff", eff, ", which belongs to N-state.")
+                                        self.formula_template.add(eff, True)
+                                        self.n_set.add(eff)
+                                        break
                             break
                         except RecursionError:
                             print('this example is to large')
@@ -242,17 +233,6 @@ class Generator:
                     if not self.check_np(res):
                         yield 0, action.name, res
 
-        # for k, range_list in action.get_all_params(var_dict).items():
-        #     for param_range in range_list:
-        #         if param_range[0] <= param_range[1]:
-        #             for param in range(param_range[0], param_range[1] + 1):
-        #                 param_dict = {k: param}
-        #                 eff_dict = action.get_eff(var_dict, param_dict)
-        #                 if eff_dict is not None:
-        #                     res = self.get_state_tuple(eff_dict)
-        #                     if not self.check_np(res):
-        #                         yield param, action.name, res
-
     def generate_param(self, state_list, demo, rec):
         if len(state_list) == 0:
             rqu_template = EquTemplate(len(self.domain.pddl2icg))
@@ -281,9 +261,8 @@ class Generator:
         print('refined model:', refiner_model)
 
         strategies = []
-        cover_idx = 0
-        while cover_idx < len(refiner_model):
-            cover_list = refiner_model[cover_idx]
+        find = [False for _ in refiner_model]
+        for cover_idx, cover_list in enumerate(refiner_model):
             cover = simplify(And(*cover_list))
             print('-' * 50, "\ncover:", cover)
             for action in self.domain.actions:
@@ -330,19 +309,16 @@ class Generator:
                             break
                     else:
                         strategies.append((cover, action.name, param_expr))
+                        find[cover_idx] = True
                         flag = True
-                        break
+                        break  # break generating loop
                 if flag:
-                    break
+                    break  # break action loop
             # 遍历完了action也没有找到策略
-            if len(strategies) == cover_idx:
-                print("cover fail to generate strategy")
-                for i in range(len(refiner_model)):
-                    if i != cover_idx:
-                        s = Solver()
-                        s.add(cover, And(*refiner_model[i]))
-                        if s.check() == sat:
-                            refiner_model[cover_idx].append(Not(And(*refiner_model[i])))
-            else:
-                cover_idx += 1
+
+        failed_cover_list = [simplify(And(*cover_list))
+                             for i, cover_list in enumerate(refiner_model)
+                             if not find[i]]
+
+        print('failed cover', failed_cover_list)
         return strategies

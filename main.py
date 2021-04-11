@@ -6,18 +6,19 @@ import os
 
 if __name__ == '__main__':
     start = time.time()
-    # domain = PDDLParser("./pddl/Empty_and_divide.pddl")
+    domain = PDDLParser("./pddl/Empty_and_divide.pddl")
     # domain = PDDLParser("./pddl/two_piled_nim.pddl")
     # domain = PDDLParser("./pddl/Chomp_game.pddl")
     # domain = PDDLParser("./pddl/L_shaped_chomp_game.pddl")
     # domain = PDDLParser("./pddl/Max_min_two_piled_nim.pddl")
     # domain = PDDLParser("./pddl/Monotonic_2_piled_nim.pddl")
-    # domain = PDDLParser("./pddl/monotonic_2_piled_wythoff_game.pddl")  # 程序错误
+    # domain = PDDLParser("./pddl/monotonic_2_piled_wythoff_game.pddl")
     # domain = PDDLParser("./pddl/Wythoff_game.pddl")
-    domain = PDDLParser("./pddl/Take_Away.pddl")
+    # domain = PDDLParser("./pddl/Take_Away.pddl")
     # domain = PDDLParser("./pddl/Subtraction_game.pddl")
+    # domain = PDDLParser("./pddl/Wythoff_game_odd_even.pddl")
     gen = Generator(domain)
-    formula_template = gen.generate_formula()
+    formula_template = gen.generate_formula(5)
     formula = simplify(formula_template.formula_model())
     cost1 = time.time() - start
     print('*' * 50)
