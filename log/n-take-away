@@ -33,3 +33,8 @@ N-formula:	 Not(v0%5 == 0)
 time cost:	 0.2500345706939697
 strategies:	 [(v0%5 == 1, 'take', 1), (v0%5 == 2, 'take', 2), (v0%5 == 3, 'take', 3), (v0%5 == 4, 'take', 4)]
 time cost:	 0.7900843620300293
+
+N-formula:	 Not(v0%5 == 0)
+time cost:	 0.3999345302581787
+strategies:	 [(v0%5 == 1, 'take', 1), (v0%5 == 2, 'take', 2), (v0%5 == 3, 'take', 3), (v0%5 == 4, 'take', 4)]
+time cost:	 1.6584253311157227

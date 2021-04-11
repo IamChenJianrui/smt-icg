@@ -36,14 +36,28 @@ class Generator:
     def gen_eff(self, state):
         var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
         for action in self.domain.actions:
-            for k, range_list in action.get_all_params(var_dict).items():
-                for param_range in range_list:
-                    if param_range[0] <= param_range[1]:
-                        for param in range(param_range[0], param_range[1] + 1):
-                            param_dict = {k: param}
-                            eff_dict = action.get_eff(var_dict, param_dict)
-                            if eff_dict is not None:
-                                yield self.get_state_tuple(eff_dict)
+            param, param_set, ok = action.get_all_params(var_dict)
+            if ok :
+                if len(param_set) > 0:
+                    for k in param_set:
+                        param_dict = {param: k}
+                        eff_dict = action.get_eff(var_dict, param_dict)
+                        if eff_dict is not None:
+                            yield self.get_state_tuple(eff_dict)
+                else:
+                    param_dict = {param: 0}
+                    eff_dict = action.get_eff(var_dict, param_dict)
+                    if eff_dict is not None:
+                        yield self.get_state_tuple(eff_dict)
+
+            # for k, range_list in action.get_all_params(var_dict).items():
+            #     for param_range in range_list:
+            #         if param_range[0] <= param_range[1]:
+            #             for param in range(param_range[0], param_range[1] + 1):
+            #                 param_dict = {k: param}
+            #                 eff_dict = action.get_eff(var_dict, param_dict)
+            #                 if eff_dict is not None:
+            #                     yield self.get_state_tuple(eff_dict)
 
     def check_np(self, state):
         if state in self.p_demo:
@@ -208,16 +222,36 @@ class Generator:
 
     def gen_eff2(self, state, action):
         var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
-        for k, range_list in action.get_all_params(var_dict).items():
-            for param_range in range_list:
-                if param_range[0] <= param_range[1]:
-                    for param in range(param_range[0], param_range[1] + 1):
-                        param_dict = {k: param}
-                        eff_dict = action.get_eff(var_dict, param_dict)
-                        if eff_dict is not None:
-                            res = self.get_state_tuple(eff_dict)
-                            if not self.check_np(res):
-                                yield param, action.name, res
+
+        var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
+        param, param_set, ok = action.get_all_params(var_dict)
+        if ok:
+            if len(param_set) > 0:
+                for k in param_set:
+                    param_dict = {param: k}
+                    eff_dict = action.get_eff(var_dict, param_dict)
+                    if eff_dict is not None:
+                        res = self.get_state_tuple(eff_dict)
+                        if not self.check_np(res):
+                            yield k, action.name, res
+            else:
+                param_dict = {param: 0}
+                eff_dict = action.get_eff(var_dict, param_dict)
+                if eff_dict is not None:
+                    res = self.get_state_tuple(eff_dict)
+                    if not self.check_np(res):
+                        yield 0, action.name, res
+
+        # for k, range_list in action.get_all_params(var_dict).items():
+        #     for param_range in range_list:
+        #         if param_range[0] <= param_range[1]:
+        #             for param in range(param_range[0], param_range[1] + 1):
+        #                 param_dict = {k: param}
+        #                 eff_dict = action.get_eff(var_dict, param_dict)
+        #                 if eff_dict is not None:
+        #                     res = self.get_state_tuple(eff_dict)
+        #                     if not self.check_np(res):
+        #                         yield param, action.name, res
 
     def generate_param(self, state_list, demo, rec):
         if len(state_list) == 0:

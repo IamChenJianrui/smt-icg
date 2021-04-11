@@ -1,10 +1,11 @@
 (define (domain Subtraction_game)
+    (:constants ?a 1 ?b 2 ?c 4)
     (:objects ?v)
     (:type normal)
     (:tercondition (and (>= ?v 0) (< ?v 1) ))
     (:constraint (>= ?v 0))
     (:action take
         :parameters (?k)
-        :precondition (and (>= ?v ?k) (or (= ?k 1) (= ?k 2) (= ?k 4)))
+        :precondition (and (>= ?v ?k) (or (= ?k ?a) (= ?k ?b) (= ?k ?c)))
         :effect (assign ?v (- ?v ?k)))
 )
