@@ -13,3 +13,8 @@ N-formula:	 Not(-1*v0 + v1 == -1)
 time cost:	 0.28128767013549805
 strategies:	 [(Not(-1 <= -1*v0 + v1), 'eat1', 2 + v1), (Not(-1*v0 + v1 <= -1), 'eat2', v0)]
 time cost:	 0.97908616065979
+
+N-formula:	 Not(-1*v0 + v1 == -1)
+time cost:	 0.3437075614929199
+strategies:	 [(Not(-1 <= -1*v0 + v1), 'eat1', 2 + v1), (Not(-1*v0 + v1 <= -1), 'eat2', v0)]
+time cost:	 0.8279359340667725

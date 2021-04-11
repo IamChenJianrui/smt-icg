@@ -5,6 +5,6 @@
     (:constraint (>= ?v 0))
     (:action take
         :parameters (?k)
-        :precondition (and (>= ?v ?k) (= ?k 1) (= ?k 2))
+        :precondition (and (>= ?v ?k) (or (= ?k 1) (= ?k 2) (= ?k 4)))
         :effect (assign ?v (- ?v ?k)))
 )

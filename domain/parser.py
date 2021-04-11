@@ -9,6 +9,7 @@ class PDDLParser:
     def __init__(self, pddl_pwd):
         self.pddl2icg = {}
         self.eff_mapper = {}
+        self.constant_mapper = {}
         # self.variables = []
         self.ending_states = []
         self.constraints = None
@@ -44,6 +45,14 @@ class PDDLParser:
             print("%s: %s" % (k, v))
         print("/" * 100)
 
+        print("Analysing constants:")
+        self._analyse_constants(task_dict["constants"])
+        print(self.constant_mapper)
+        self._replace_constant(task_dict["tercondition"])
+        self._replace_constant(task_dict["constraint"])
+        self._replace_constant(task_dict["action"])
+        print("/" * 50)
+
         print("Analysing objects:")
         self._analyse_objects(task_dict["objects"])
         self.eff_mapper = {k: Int("w%d" % i) for i, k in enumerate(self.pddl2icg)}
@@ -73,6 +82,16 @@ class PDDLParser:
         print("Analysing actions:")
         self.actions.extend(self._analyse_action(task_dict["action"]))
         print("/" * 100)
+
+    def _analyse_constants(self, arr):
+        self.constant_mapper = {arr[i]: arr[i + 1] for i in range(0, len(arr), 2)}
+
+    def _replace_constant(self, arr):
+        for i, elem in enumerate(arr):
+            if type(elem) == list :
+                self._replace_constant(elem)
+            elif elem in self.constant_mapper:
+                    arr[i] = self.constant_mapper[elem]
 
     def _analyse_objects(self, arr):
         # 解析PDDL中的变量，将其转化为Z3的变量，用列表按序存储
@@ -117,6 +136,7 @@ class PDDLParser:
                 return self.pddl2icg[key]
             else:
                 return int(key)
+
         return analyse_snt_z3(word_list, mapper)
 
     def transition_formula(self):

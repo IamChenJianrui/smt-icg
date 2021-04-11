@@ -103,13 +103,19 @@ class Generator:
                             self.formula_template.add(example, False)
                             self.p_set.add(example)
                         else:
-                            print("This example belong to N-state. Need to find its eff which belongs to P-state.")
+                            print("This example belong to N-state.")
                             for eff in self.gen_eff(example):
-                                if not self.check_np(eff) and bool(self.formula_template.formula_model(*eff)):
-                                    print("find an eff", eff, ", which belongs to P-state.")
-                                    self.formula_template.add(eff, False)
-                                    self.p_set.add(eff)
-                                    break
+                                if not self.check_np(eff):
+                                    if bool(self.formula_template.formula_model(*eff)):
+                                        print("find an eff", eff, ", which belongs to P-state.")
+                                        self.formula_template.add(eff, False)
+                                        self.p_set.add(eff)
+                                        break
+                                elif not bool(self.formula_template.formula_model(*eff)):
+                                        print("find an eff", eff, ", which belongs to N-state.")
+                                        self.formula_template.add(eff, False)
+                                        self.p_set.add(eff)
+                                        break
                         break
                     except RecursionError:
                         print('this example is to large')
@@ -136,13 +142,19 @@ class Generator:
                                 self.formula_template.add(example, True)
                                 self.n_set.add(example)
                             else:
-                                print("This example belong to P-state. Need to find its eff which belongs to N-state.")
+                                print("This example belong to P-state.")
                                 for eff in self.gen_eff(example):
-                                    if self.check_np(eff) and not bool(self.formula_template.formula_model(*eff)):
-                                        print("find an eff", eff, ", which belongs to P-state.")
-                                        self.formula_template.add(eff, True)
-                                        self.n_set.add(eff)
-                                        break
+                                    if self.check_np(eff):
+                                        if not bool(self.formula_template.formula_model(*eff)):
+                                            print("find an eff", eff, ", which belongs to P-state.")
+                                            self.formula_template.add(eff, True)
+                                            self.n_set.add(eff)
+                                            break
+                                    elif bool(self.formula_template.formula_model(*eff)):
+                                            print("find an eff", eff, ", which belongs to N-state.")
+                                            self.formula_template.add(eff, True)
+                                            self.n_set.add(eff)
+                                            break
                             break
                         except RecursionError:
                             print('this example is to large')

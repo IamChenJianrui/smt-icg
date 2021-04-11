@@ -1,10 +1,11 @@
 (define (domain n-take-away)
+    (:constants ?n 4)
     (:objects ?v)
     (:type normal)
     (:tercondition (= ?v 0))
     (:constraint (>= ?v 0))
     (:action take
         :parameters (?k)
-        :precondition (and (>= ?k 1) (<= ?k 3) (>= ?v ?k))
+        :precondition (and (>= ?k 1) (<= ?k ?n) (>= ?v ?k))
         :effect (assign ?v (- ?v ?k)))
 )

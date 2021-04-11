@@ -68,9 +68,10 @@ class Action:
             for word in word_list:
                 if type(word) == list:
                     format_precond(word)
-            if word_list[0] in op_mapper and word_list[2] in self.params_mapper:
-                word_list[0] = op_mapper[word_list[0]]
-                word_list[1], word_list[2] = word_list[2], word_list[1]
+            if word_list[0] in op_mapper:
+                if type(word_list[2]) is not list and word_list[2] in self.params_mapper:
+                    word_list[0] = op_mapper[word_list[0]]
+                    word_list[1], word_list[2] = word_list[2], word_list[1]
 
         format_precond(self.precond_list)
 
@@ -139,7 +140,7 @@ class Action:
         if self.precond_list[0] == 'and':
             params_range_of_each_clause = {k: [0, 1 << 32] for k in self.params_mapper}
             for snt_list in self.precond_list[1:]:
-                if type(snt_list[1]) == list:
+                if snt_list[0] == 'or':
                     pass
                 if snt_list[1] in self.params_mapper:
                     res = analyse_snt_bool(snt_list[2], mapper)
