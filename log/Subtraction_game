@@ -1,0 +1,35 @@
+
+N-formula:	 False
+time cost:	 0.06248641014099121
+strategies:	 []
+time cost:	 0.07810544967651367
+
+N-formula:	 Not(v0%3 == 0)
+time cost:	 0.27689480781555176
+strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
+time cost:	 0.8603610992431641
+
+N-formula:	 Not(v0%3 == 0)
+time cost:	 0.3336198329925537
+strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
+time cost:	 0.9002666473388672
+
+N-formula:	 Not(v0%3 == 0)
+time cost:	 0.7419793605804443
+strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
+time cost:	 1.898463249206543
+
+N-formula:	 Not(v0%3 == 0)
+time cost:	 0.34222960472106934
+strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
+time cost:	 0.9705839157104492
+
+N-formula:	 Not(v0%3 == 0)
+time cost:	 0.29775118827819824
+strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
+time cost:	 1.0406851768493652
+
+N-formula:	 Not(v0%3 == 0)
+time cost:	 0.30966663360595703
+strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
+time cost:	 0.8750121593475342
