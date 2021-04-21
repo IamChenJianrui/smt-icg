@@ -213,8 +213,6 @@ class Generator:
 
     def gen_eff2(self, state, action):
         var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
-
-        var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
         param, param_set, ok = action.get_all_params(var_dict)
         if ok:
             if len(param_set) > 0:
@@ -233,24 +231,25 @@ class Generator:
                     if not self.check_np(res):
                         yield 0, action.name, res
 
-    def generate_param(self, state_list, demo, rec):
+    def combination_of_demo(self, state_list, demo, tmp, res):
         if len(state_list) == 0:
-            rqu_template = EquTemplate(len(self.domain.pddl2icg))
-            for s in rec:
-                rqu_template.add(s)
-            if rqu_template.check() == sat:
-                return rqu_template.solve_model()
-            return None
-        tmp = []
-        tmp.extend(state_list[0])
+            res.append(list(tmp))
+            return
+        state = []
+        state.extend(state_list[0])
         for b in demo[state_list[0]]:
-            tmp.append(b)
-            rec.append(tmp)
-            res = self.generate_param(state_list[1:], demo, rec)
-            if res is not None:
-                return res
-            rec.pop()
+            state.append(b)
+            tmp.append(list(state))
+            self.combination_of_demo(state_list[1:], demo, tmp, res)
             tmp.pop()
+            state.pop()
+
+    def generate_param(self, exam_set):
+        rqu_template = EquTemplate(len(self.domain.pddl2icg))
+        for vec in exam_set:
+            rqu_template.add(vec)
+        if rqu_template.check() == sat:
+            return rqu_template.solve_model()
         return None
 
     def generate_strategy(self):
@@ -285,36 +284,44 @@ class Generator:
                 while True:
                     print(action.name, demo)
                     state_list = list(demo.keys())
-                    param_expr = self.generate_param(state_list, demo, [])
-                    print("param of action:", param_expr)
+                    comb_list = []
+                    self.combination_of_demo(state_list, demo, [], comb_list)
+                    for example_set in comb_list:
+                        print('example:', example_set)
+                        param_expr = self.generate_param(example_set)
+                        if param_expr is None:
+                            continue
 
-                    tf = action.trans_formula()
-                    wf = self.formula_template.formula_model(*eff_var)
-                    const = simplify(Implies(cover, ForAll(eff_var, Implies(tf, Not(wf)))))
-                    free_p = list(action.params_mapper.values())[0]  # 动作的参数
-                    s = Solver()
-                    s.add(self.domain.constraints, free_p == param_expr, Not(const))
-                    if s.check() == sat:
-                        model = s.model()
-                        example = [model[self.formula_template.vi[i]].as_long()
-                                   if model[self.formula_template.vi[i]] is not None
-                                   else 0 for i in range(self.formula_template.n)]
-                        example = tuple(example)
-                        print(model)
-                        print("find a counterexample:", example)
-                        params = [param[0] for param in self.gen_eff2(example, action)]
-                        if len(params) > 0:
-                            demo[example] = [k for k in params]
+                        print("param of action:", param_expr)
+                        tf = action.trans_formula()
+                        wf = self.formula_template.formula_model(*eff_var)
+                        const = simplify(Implies(cover, ForAll(eff_var, Implies(tf, Not(wf)))))
+                        free_p = list(action.params_mapper.values())[0]  # 动作的参数
+                        s = Solver()
+                        s.add(self.domain.constraints, free_p == param_expr, Not(const))
+                        if s.check() == sat:
+                            model = s.model()
+                            example = [model[self.formula_template.vi[i]].as_long()
+                                       if model[self.formula_template.vi[i]] is not None
+                                       else 0 for i in range(self.formula_template.n)]
+                            example = tuple(example)
+                            print(model)
+                            print("find a counterexample:", example)
+                            params = [param[0] for param in self.gen_eff2(example, action)]
+                            if len(params) > 0:
+                                demo[example] = [k for k in params]
+                            else:
+                                break
                         else:
-                            break
-                    else:
-                        strategies.append((cover, action.name, param_expr))
-                        find[cover_idx] = True
-                        flag = True
-                        break  # break generating loop
+                            strategies.append((cover, action.name, param_expr))
+                            find[cover_idx] = True
+                            flag = True
+                            break # break for loop
+                    if flag:
+                        break # break while loop
                 if flag:
-                    break  # break action loop
-            # 遍历完了action也没有找到策略
+                    break #break action loop
+                # 遍历完了action也没有找到策略
 
         failed_cover_list = [simplify(And(*cover_list))
                              for i, cover_list in enumerate(refiner_model)
