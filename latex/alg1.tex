@@ -1,0 +1,85 @@
+\documentclass[8pt,twocolumn]{ctexart}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{textcomp} %命令\textacutedbl的包,二阶导符号
+
+% Page length commands go here in the preamble
+\setlength{\oddsidemargin}{-0.25in} % Left margin of 1 in + 0 in = 1 in
+\setlength{\textwidth}{9in}   % 纸张宽度Right margin of 8.5 in - 1 in - 6.5 in = 1 in
+\setlength{\topmargin}{-.75in}  % Top margin of 2 in -0.75 in = 1 in
+\setlength{\textheight}{9.2in}  % Lower margin of 11 in - 9 in - 1 in = 1 in
+\setlength{\parindent}{0in}
+
+
+\makeatletter
+\newif\if@restonecol
+\makeatother
+\let\algorithm\relax
+\let\endalgorithm\relax
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}%[ruled,vlined]{
+\usepackage{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}} 
+\renewcommand{\algorithmicensure}{\textbf{Output:}} 
+
+\begin{document}
+
+\begin{algorithm}
+    \caption{$GenerateWinningFormula(\Phi)$}
+    \LinesNumbered
+    \KwIn{a DNF template $\Phi$}
+    \KwOut{winning formula $\phi^*$}
+    
+    $fsolver \gets Solver()$\;
+	$fsolver.add(encoding((\varepsilon, \bot)))$\;
+	$\phi^*\gets fsolver.solve()$\;
+    
+    \While{True}{
+        $s1\gets Solver()$\;
+		$NCst\gets\left(\mathcal{C}\land\phi^*\right)\rightarrow\exists\mathcal{X}'\left[\mathcal{T}\left(\mathcal{A}\right)\land\lnot\phi^*\left[\mathcal{X}/\mathcal{X}'\right]\right]$\;
+		$s1.add(\neg NCst)$\;
+		\If{$s1.check()=sat$} {
+		    $x_e\gets s1.solve()$\;
+		    \If{$y_e\neq\left(x_e\models\phi\ast\right)$} {
+		        $fsolver.add(encoding((x_e,y_e)))$\;
+		    } 
+		    \Else{
+		        \For{$x'_e$ in $do(\mathcal{A},x_e)$} {
+		            \If{$y'_e\neq\left(x'_e\models\phi\ast\right)$} {
+		                $fsolver.add(encoding((x'_e,y'_e)))$\;
+		            }
+		        }
+		    }
+		}
+		\Else {
+		    $s2\gets Solver()$\;
+    	    $PCst\gets\left(\mathcal{C}\land\lnot\phi^*\land\lnot\varepsilon\right)\rightarrow\forall\mathcal{X}'\left[\mathcal{T}\left(\mathcal{A}\right)\rightarrow\phi^*\left[\mathcal{X}/\mathcal{X}'\right]\right]$\;
+    		$s2.add(\neg PCst)$\;
+    		\If{$s2.check()=sat$} {
+    		    $x_e\gets s2.solve()$\;
+    		    \If{$y_e\neq\left(x_e\models\phi\ast\right)$} {
+    		        $fsolver.add(encoding((x_e,y_e)))$\;
+    		    }
+    		    \Else {
+    		        \For{$x'_e$ in $do(\mathcal{A},x_e)$} {
+    		            \If{$y'_e\neq\left(x'_e\models\phi\ast\right)$} {
+		                    $fsolver.add(encoding((x'_e,y'_e)))$\;
+		                }
+    		        }
+    		    }
+    		} 
+    		\Else{
+    		   break while\;
+    		}
+		}
+		
+		\If{$fsolver.check=unsat$} {
+    	    $\Phi\gets extend(\Phi)$\;
+    		return $GenerateWinningFormula(\Phi)$\;
+    	}
+        $\phi^*\gets fsolver.solve()$\;
+    }
+    
+    return $\phi^*$\;
+\end{algorithm}
+
+\end{document}

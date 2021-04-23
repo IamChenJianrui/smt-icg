@@ -1,0 +1,59 @@
+\documentclass[8pt,twocolumn]{ctexart}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{textcomp} %命令\textacutedbl的包,二阶导符号
+
+% Page length commands go here in the preamble
+\setlength{\oddsidemargin}{-0.25in} % Left margin of 1 in + 0 in = 1 in
+\setlength{\textwidth}{9in}   % 纸张宽度Right margin of 8.5 in - 1 in - 6.5 in = 1 in
+\setlength{\topmargin}{-.75in}  % Top margin of 2 in -0.75 in = 1 in
+\setlength{\textheight}{9.2in}  % Lower margin of 11 in - 9 in - 1 in = 1 in
+\setlength{\parindent}{0in}
+
+
+\makeatletter
+\newif\if@restonecol
+\makeatother
+\let\algorithm\relax
+\let\endalgorithm\relax
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}%[ruled,vlined]{
+\usepackage{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}} 
+\renewcommand{\algorithmicensure}{\textbf{Output:}} 
+
+\begin{document}
+
+\begin{algorithm}
+    \caption{$SynthesisStrategy(\Psi)$}
+    \LinesNumbered
+    \KwIn{set of refined formula $\Psi=\{\psi_1,\psi_2,\dots\psi_n\}$}
+    \KwOut{set of winning strategy $\delta$}
+    
+    $\delta\gets\{\}$\;
+    \For{$\psi$ in $\Psi$} {
+        \For{a in $\mathcal{A}$} {
+            define $E=\{(x_e,\{k\})|x_e\vDash\psi\land pre(a(k))\land do(a(k),x_e)\vDash\neg\phi\}$\;
+            initial $E$ with several states that satisfy $\psi$\;
+            \While{True} {
+                $\Sigma\gets generate(E)$\;
+                \If{$\Sigma$ unsat} {
+                    break\;
+                }
+                $s\gets solver$\;
+                $cst\gets\mathcal{C}\land\psi\rightarrow\forall\mathcal{X}'[\mathcal{T}(a(k/\Sigma))\rightarrow\lnot\phi[\mathcal{X}/\mathcal{X}']]$\;
+                $s.add(\neg cst)$\;
+                \If{$s.check()=sat$}{
+                    $x_e\gets s.solve()$\;
+                    $E\gets E\cup\{(x_e,paramSet(a,x_e))\}$\;
+                }
+                \Else{
+                    $\delta\gets\delta\cup\{(\psi,a(k/\Sigma))\}$\;
+                    break loop in line 3\;
+                }
+            }
+        }
+    }
+    return $\delta$\;
+    
+\end{algorithm}
+\end{document}

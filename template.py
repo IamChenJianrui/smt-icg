@@ -212,6 +212,33 @@ class FormulaTemplate:
             formu.append(And(*clause))
         return simplify(Or(*formu))
 
+    def refine_modu(self, coe, e, b, res, tmp, last=0):
+        if len(coe) == 1:
+            if coe[0] == 0:
+                if last % e == b:
+                    tmp.append(0)
+                else:
+                    return
+            for i in range(e):
+                if (i + last) % e == b:
+                    tmp.append(i)
+                    break
+            res.append(list(tmp))
+            tmp.pop()
+        elif coe[0] == 0:
+            tmp.append(0)
+            self.refine_modu(coe[1:], e, b, res, tmp, last)
+            tmp.pop()
+        else:
+            for i in range(e):
+                tmp.append(i)
+                self.refine_modu(coe[1:], e, b, res, tmp, last + i)
+                tmp.pop()
+
+    def build_formula(self, coe, V, e, C):
+        expr = And(*[(coe[i] * v) % e == C[i] for i, v in enumerate(V)])
+        return simplify(expr)
+
     def refine_model(self):
         formu_arr = []
         for k in range(self.k):
@@ -235,14 +262,22 @@ class FormulaTemplate:
                     clause.append([False])
             for m in range(self.m):
                 status = (self.T[k][m], self.Nt[k][m])
-                Com = combine(self.M[m][j] * self.vi[j] for j in range(self.n))
+                # Com = combine(self.M[m][j] * self.vi[j] for j in range(self.n))
                 if status == (True, False):
-                    clause.append([Com % self.E[m] == self.C[m]])
+                    # clause.append([Com % self.E[m] == self.C[m]])
+                    mod_res = []
+                    self.refine_modu(self.M[m], self.E[m], self.C[m], mod_res, [])
+                    for C in mod_res:
+                        clause.append([self.build_formula(self.M[m], self.vi, self.E[m], C)])
                 elif status == (False, True):
                     mod_clause = []
                     for i in range(int(self.E[m])):
                         if i != self.C[m]:
-                            mod_clause.append(Com % self.E[m] == i)
+                            # mod_clause.append(Com % self.E[m] == i)
+                            mod_res = []
+                            self.refine_modu(self.M[m], self.E[m], i, mod_res, [])
+                            for C in mod_res:
+                                mod_clause.append(self.build_formula(self.M[m], self.vi, self.E[m], C))
                     clause.append(mod_clause)
                 elif status == (True, True):
                     clause.append([False])
