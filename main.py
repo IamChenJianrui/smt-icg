@@ -7,7 +7,7 @@ import os
 if __name__ == '__main__':
     start = time.time()
     # domain = PDDLParser("./pddl/Empty_and_divide.pddl")
-    domain = PDDLParser("./pddl/two_piled_nim.pddl")
+    # domain = PDDLParser("./pddl/two_piled_nim.pddl")
     # domain = PDDLParser("./pddl/Chomp_game.pddl")
     # domain = PDDLParser("./pddl/L_shaped_chomp_game.pddl")
     # domain = PDDLParser("./pddl/Max_min_two_piled_nim.pddl")
@@ -17,6 +17,7 @@ if __name__ == '__main__':
     # domain = PDDLParser("./pddl/Take_Away.pddl")
     # domain = PDDLParser("./pddl/Subtraction_game.pddl")
     # domain = PDDLParser("./pddl/Wythoff_game_odd_even.pddl")
+    domain = PDDLParser("./pddl/monotic_2_diet_wythoff.pddl")
     gen = Generator(domain)
     formula_template = gen.generate_formula()
     formula = simplify(formula_template.formula_model())
