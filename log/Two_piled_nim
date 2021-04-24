@@ -13,3 +13,13 @@ N-formula:	 Not(v0 + -1*v1 == 0)
 time cost:	 0.1525571346282959
 strategies:	 [(Not(0 <= v0 + -1*v1), 'take2', -1*v0 + v1), (Not(v0 + -1*v1 <= 0), 'take1', v0 + -1*v1)]
 time cost:	 0.7744934558868408
+
+N-formula:	 Not(v0 + -1*v1 == 0)
+time cost:	 0.24446797370910645
+strategies:	 [(Not(0 <= v0 + -1*v1), 'take2', -1*v0 + v1), (Not(v0 + -1*v1 <= 0), 'take1', v0 + -1*v1)]
+time cost:	 1.5566461086273193
+
+N-formula:	 Not(v0 + -1*v1 == 0)
+time cost:	 0.21814227104187012
+strategies:	 [(Not(0 <= v0 + -1*v1), 'take2', -1*v0 + v1), (Not(v0 + -1*v1 <= 0), 'take1', v0 + -1*v1)]
+time cost:	 1.4421155452728271

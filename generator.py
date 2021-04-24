@@ -284,10 +284,13 @@ class Generator:
                 while True:
                     print(action.name, demo)
                     state_list = list(demo.keys())
-                    comb_list = []
+                    comb_list = []  # 当前action下可能的所有情况
                     self.combination_of_demo(state_list, demo, [], comb_list)
-                    for example_set in comb_list:
-                        print('example:', example_set)
+                    while len(comb_list) > 0:
+                        # for example_set in comb_list:
+                        example_set = comb_list[0]
+                        print('example:', comb_list)
+                        comb_list = comb_list[1:]
                         param_expr = self.generate_param(example_set)
                         if param_expr is None:
                             continue
@@ -310,22 +313,32 @@ class Generator:
                             params = [param[0] for param in self.gen_eff2(example, action)]
                             if len(params) > 0:
                                 demo[example] = [k for k in params]
+                                need_to_append_list = [[*example, k] for k in params]
+                                k = len(comb_list)
+                                for ntal in need_to_append_list:
+                                    comb_list.append([*example_set, ntal])
+                                while k > 0:
+                                    example_set = comb_list[0]
+                                    comb_list = comb_list[1:]
+                                    k -= 1
+                                    for ntal in need_to_append_list:
+                                        comb_list.append([*example_set, ntal])
                             else:
                                 break
                         else:
                             strategies.append((cover, action.name, param_expr))
                             find[cover_idx] = True
                             flag = True
-                            break # break for loop
+                            break  # break for loop
                     if flag:
-                        break # break while loop
+                        break  # break while loop
                 if flag:
-                    break #break action loop
+                    break  # break action loop
                 # 遍历完了action也没有找到策略
 
         failed_cover_list = [simplify(And(*cover_list))
                              for i, cover_list in enumerate(refiner_model)
                              if not find[i]]
-
-        print('failed cover', failed_cover_list)
+        if (len(failed_cover_list)) > 0:
+            print('failed cover', failed_cover_list)
         return strategies

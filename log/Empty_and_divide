@@ -128,3 +128,23 @@ N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
 time cost:	 0.19422316551208496
 strategies:	 [(v1%2 == 0, 'empty1', 1), (And(v0%2 == 0, v1%2 == 1), 'empty2', 1), (And(v0%2 == 1, v1%2 == 0), 'empty1', 1)]
 time cost:	 2.1937546730041504
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.3280484676361084
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And(v0%2 == 0, v1%2 == 1), 'empty2', 1), (And(v0%2 == 1, v1%2 == 0), 'empty1', 1)]
+time cost:	 2.7024881839752197
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.19091391563415527
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And(v0%2 == 0, v1%2 == 1), 'empty2', 1), (And(v0%2 == 1, v1%2 == 0), 'empty1', 1)]
+time cost:	 2.1726410388946533
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.1900489330291748
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And(v0%2 == 0, v1%2 == 1), 'empty2', 1), (And(v0%2 == 1, v1%2 == 0), 'empty1', 1)]
+time cost:	 2.161576747894287
+
+N-formula:	 Or(v1%2 == 0, Not((v0 + v1)%2 == 0))
+time cost:	 0.19854211807250977
+strategies:	 [(v1%2 == 0, 'empty1', 1), (And(v0%2 == 0, v1%2 == 1), 'empty2', 1), (And(v0%2 == 1, v1%2 == 0), 'empty1', 1)]
+time cost:	 2.3119540214538574
