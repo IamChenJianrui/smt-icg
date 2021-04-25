@@ -43,3 +43,9 @@ N-formula:	 Not(v0%5 == 0)
 time cost:	 0.3998878002166748
 strategies:	 [(v0%5 == 1, 'take', 1), (v0%5 == 2, 'take', 2), (v0%5 == 3, 'take', 3), (v0%5 == 4, 'take', 4)]
 time cost:	 1.6998729705810547
+
+misere rule
+N-formula:	 Not((3*v0)%5 == 3)
+time cost:	 604.6111917495728
+strategies:	 [((3*v0)%5 == 1, 'take', 1), ((3*v0)%5 == 2, 'take', 3), ((3*v0)%5 == 4, 'take', 2)]
+time cost:	 605.7532651424408

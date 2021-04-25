@@ -1,5 +1,5 @@
 from domain.parser import PDDLParser
-from generator import Generator
+from generator import NormalGenerator
 from z3 import simplify
 import time
 import os
@@ -10,15 +10,13 @@ if __name__ == '__main__':
     # domain = PDDLParser("./pddl/two_piled_nim.pddl")
     # domain = PDDLParser("./pddl/Chomp_game.pddl")
     # domain = PDDLParser("./pddl/L_shaped_chomp_game.pddl")
-    # domain = PDDLParser("./pddl/Max_min_two_piled_nim.pddl")
     # domain = PDDLParser("./pddl/Monotonic_2_piled_nim.pddl")
-    # domain = PDDLParser("./pddl/monotonic_2_piled_wythoff_game.pddl")
-    # domain = PDDLParser("./pddl/Wythoff_game.pddl")
+    # domain = PDDLParser("./pddl/monotic_2_diet_wythoff.pddl")
+    domain = PDDLParser("./pddl/monotonic_2_piled_wythoff_game.pddl")
     # domain = PDDLParser("./pddl/Take_Away.pddl")
     # domain = PDDLParser("./pddl/Subtraction_game.pddl")
-    # domain = PDDLParser("./pddl/Wythoff_game_odd_even.pddl")
-    domain = PDDLParser("./pddl/monotic_2_diet_wythoff.pddl")
-    gen = Generator(domain)
+
+    gen = NormalGenerator(domain)
     formula_template = gen.generate_formula()
     formula = simplify(formula_template.formula_model())
     cost1 = time.time() - start
@@ -39,7 +37,8 @@ if __name__ == '__main__':
         print('strategies:\n\t %s' % strategies)
         print('time cost:\n\t %s' % cost2)
 
-        print('\nN-formula:\t %s' % formula, file=f)
+        print('\nnormal rule', file=f)
+        print('N-formula:\t %s' % formula, file=f)
         print('time cost:\t %s' % cost1, file=f)
         print('strategies:\t %s' % strategies, file=f)
         print('time cost:\t %s' % cost2, file=f)

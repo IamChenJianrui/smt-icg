@@ -177,6 +177,8 @@ class FormulaTemplate:
             self.B[i] /= divisior
             for j in range(self.n):
                 self.A[i][j] /= divisior
+        for i in range(len(self.E)):
+            self.E[i] = int(self.E[i])
 
     def formula_model(self, *val):
         if len(val) == 0:
