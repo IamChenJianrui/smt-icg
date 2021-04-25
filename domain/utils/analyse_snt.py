@@ -41,13 +41,13 @@ def analyse_snt_bool(word_list: list, mapper2const):
         for i in range(2, len(word_list)):
             if not expr:
                 return False
-            expr = expr and analyse_snt_bool(word_list[2], mapper2const)
+            expr = expr and analyse_snt_bool(word_list[i], mapper2const)
     elif word_list[0] == 'or':
         expr = analyse_snt_bool(word_list[1], mapper2const)
         for i in range(2, len(word_list)):
             if expr:
                 return True
-            expr = expr or analyse_snt_bool(word_list[2], mapper2const)
+            expr = expr or analyse_snt_bool(word_list[i], mapper2const)
     else:
         assert len(word_list) == 3
         op = word_list[0]

@@ -29,18 +29,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f640abdc-365c-4c2c-b811-8bd1398b08fb" name="Default Changelist" comment="生成器">
-      <change afterPath="$PROJECT_DIR$/main_misere.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test8.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/Monotonic_Two_piled_nim" beforeDir="false" afterPath="$PROJECT_DIR$/log/Monotonic_Two_piled_nim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log/monotic_2_diet_wythoff" beforeDir="false" afterPath="$PROJECT_DIR$/log/monotic_2_diet_wythoff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/utils/analyse_snt.py" beforeDir="false" afterPath="$PROJECT_DIR$/domain/utils/analyse_snt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/Monotonic_two_piled_wythoff_game" beforeDir="false" afterPath="$PROJECT_DIR$/log/Monotonic_two_piled_wythoff_game" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/Subtraction_game" beforeDir="false" afterPath="$PROJECT_DIR$/log/Subtraction_game" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/n-take-away" beforeDir="false" afterPath="$PROJECT_DIR$/log/n-take-away" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_normal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pddl/Max_min_two_piled_nim.pddl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pddl/Wythoff_game.pddl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pddl/Wythoff_game_odd_even.pddl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/template.py" beforeDir="false" afterPath="$PROJECT_DIR$/template.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_normal.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_normal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pddl/Subtraction_game.pddl" beforeDir="false" afterPath="$PROJECT_DIR$/pddl/Subtraction_game.pddl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pddl/Take_Away.pddl" beforeDir="false" afterPath="$PROJECT_DIR$/pddl/Take_Away.pddl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +96,7 @@
       <recent name="F:\毕业论文\program\utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test2">
+  <component name="RunManager" selected="Python.main_normal">
     <configuration name="main_misere" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="program" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -188,7 +185,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test7" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test8" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="program" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -201,7 +198,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test7.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test8.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -212,11 +209,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main_normal" />
+        <item itemvalue="Python.test8" />
         <item itemvalue="Python.test2" />
         <item itemvalue="Python.main_misere" />
         <item itemvalue="Python.main_normal (1)" />
-        <item itemvalue="Python.main_normal" />
-        <item itemvalue="Python.test7" />
       </list>
     </recent_temporary>
   </component>
@@ -268,7 +265,7 @@
       <workItem from="1619013185985" duration="379000" />
       <workItem from="1619151611710" duration="10748000" />
       <workItem from="1619229724654" duration="10089000" />
-      <workItem from="1619318982138" duration="10970000" />
+      <workItem from="1619318982138" duration="17187000" />
     </task>
     <task id="LOCAL-00001" summary="代码">
       <created>1613811101722</created>
@@ -522,7 +519,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619283028107</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="生成器">
+      <created>1619365201334</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1619365201335</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -575,11 +579,11 @@
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
     <state x="1780" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1613730064414" />
-    <state x="504" y="225" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1619281942870">
+    <state x="504" y="225" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1619370198389">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="2074" y="321" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1617702403505" />
-    <state x="504" y="225" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1619281942870" />
+    <state x="504" y="225" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1619370198389" />
     <state x="169" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1619355582872">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -589,57 +593,57 @@
     </state>
     <state x="2106" y="274" key="FileChooserDialogImpl/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1614051600566" />
     <state x="526" y="192" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1619281954852" />
-    <state width="561" height="600" key="GridCell.Tab.0.bottom" timestamp="1619363024318">
+    <state width="592" height="600" key="GridCell.Tab.0.bottom" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="527" height="600" key="GridCell.Tab.0.bottom/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1617187905677" />
     <state width="857" height="912" key="GridCell.Tab.0.bottom/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618196802173" />
-    <state width="561" height="600" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1619363024318" />
+    <state width="592" height="600" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760364" />
-    <state width="561" height="600" key="GridCell.Tab.0.center" timestamp="1619363024317">
+    <state width="592" height="600" key="GridCell.Tab.0.center" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="527" height="600" key="GridCell.Tab.0.center/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1617187905676" />
     <state width="857" height="912" key="GridCell.Tab.0.center/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618196802173" />
-    <state width="561" height="600" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1619363024317" />
+    <state width="592" height="600" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760364" />
-    <state width="561" height="600" key="GridCell.Tab.0.left" timestamp="1619363024317">
+    <state width="592" height="600" key="GridCell.Tab.0.left" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="527" height="600" key="GridCell.Tab.0.left/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1617187905676" />
     <state width="857" height="912" key="GridCell.Tab.0.left/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618196802173" />
-    <state width="561" height="600" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1619363024317" />
+    <state width="592" height="600" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760364" />
-    <state width="561" height="600" key="GridCell.Tab.0.right" timestamp="1619363024318">
+    <state width="592" height="600" key="GridCell.Tab.0.right" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="527" height="600" key="GridCell.Tab.0.right/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1617187905676" />
     <state width="857" height="912" key="GridCell.Tab.0.right/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618196802173" />
-    <state width="561" height="600" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1619363024318" />
+    <state width="592" height="600" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760364" />
-    <state width="619" height="600" key="GridCell.Tab.1.bottom" timestamp="1619283170669">
+    <state width="592" height="600" key="GridCell.Tab.1.bottom" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="832" height="912" key="GridCell.Tab.1.bottom/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618149735170" />
-    <state width="619" height="600" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1619283170669" />
+    <state width="592" height="600" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760365" />
-    <state width="619" height="600" key="GridCell.Tab.1.center" timestamp="1619283170668">
+    <state width="592" height="600" key="GridCell.Tab.1.center" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="832" height="912" key="GridCell.Tab.1.center/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618149735170" />
-    <state width="619" height="600" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1619283170668" />
+    <state width="592" height="600" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760365" />
-    <state width="619" height="600" key="GridCell.Tab.1.left" timestamp="1619283170668">
+    <state width="592" height="600" key="GridCell.Tab.1.left" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="832" height="912" key="GridCell.Tab.1.left/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618149735170" />
-    <state width="619" height="600" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1619283170668" />
+    <state width="592" height="600" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760365" />
-    <state width="619" height="600" key="GridCell.Tab.1.right" timestamp="1619283170668">
+    <state width="592" height="600" key="GridCell.Tab.1.right" timestamp="1619372062332">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="832" height="912" key="GridCell.Tab.1.right/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618149735170" />
-    <state width="619" height="600" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1619283170668" />
+    <state width="592" height="600" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1619372062332" />
     <state width="832" height="912" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1618278760365" />
     <state x="1964" y="281" key="MultipleFileMergeDialog" timestamp="1613816554720">
       <screen x="1366" y="0" width="1920" height="1040" />
@@ -651,11 +655,11 @@
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728/1366.0.1920.1040@0.0.1366.728" timestamp="1613701990887" />
     <state x="1625" y="11" key="SettingsEditor/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1613730330118" />
     <state x="259" y="11" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1613829456671" />
-    <state x="393" y="176" key="Vcs.Push.Dialog.v2" timestamp="1619283029769">
+    <state x="393" y="176" key="Vcs.Push.Dialog.v2" timestamp="1619365204204">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="1918" y="252" key="Vcs.Push.Dialog.v2/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1618156057837" />
-    <state x="393" y="176" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1619283029769" />
+    <state x="393" y="176" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1619365204204" />
     <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1613901946825" />
     <state x="2143" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1614046956893">
       <screen x="1366" y="0" width="1920" height="1040" />
@@ -679,6 +683,16 @@
           <line>70</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/generator.py</url>
+          <line>144</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/generator.py</url>
+          <line>43</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -693,11 +707,12 @@
     <SUITE FILE_PATH="coverage/program$Main.coverage" NAME="Main Coverage Results" MODIFIED="1613706676563" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/program$test4.coverage" NAME="test4 Coverage Results" MODIFIED="1614056460456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/program$generator.coverage" NAME="generator Coverage Results" MODIFIED="1614004604486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/program$test8.coverage" NAME="test8 Coverage Results" MODIFIED="1619372062316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/program$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1613730056636" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/program$test6.coverage" NAME="test6 Coverage Results" MODIFIED="1619191720050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/program$test3.coverage" NAME="test3 Coverage Results" MODIFIED="1613899779274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/program$main_normal.coverage" NAME="main_normal Coverage Results" MODIFIED="1619339962788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/program$main_normal__1_.coverage" NAME="main_normal (1) Coverage Results" MODIFIED="1619355747816" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/program$main_normal.coverage" NAME="main_normal Coverage Results" MODIFIED="1619370857198" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/program$template.coverage" NAME="template Coverage Results" MODIFIED="1617675297088" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/program$action.coverage" NAME="action Coverage Results" MODIFIED="1618149735130" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/domain" />
     <SUITE FILE_PATH="coverage/program$test2.coverage" NAME="test2 Coverage Results" MODIFIED="1619360669146" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />

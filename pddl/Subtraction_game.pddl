@@ -1,5 +1,5 @@
 (define (domain Subtraction_game)
-    (:constants ?a 1 ?b 2 ?c 5)
+    (:constants ?a 1 ?b 2 ?c 6)
     (:objects ?v)
     (:type normal)
     (:tercondition (= ?v 0))

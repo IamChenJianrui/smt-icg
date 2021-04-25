@@ -2,11 +2,20 @@
 normal rule
 N-formula:	 Not((v0 + v1)%3 == 0)
 time cost:	 5.5776472091674805
-strategies:	 [(And(v0%3 == 0, v1%3 == 1), 'take2', 1), (And(v0%3 == 1, v1%3 == 0), 'take1', 1), (And(v0%3 == 2, v1%3 == 2), 'take1', 1), (And(v0%3 == 0, v1%3 == 2), 'take2', 2), (And(v0%3 == 1, v1%3 == 1), 'take2', 2), (And(v0%3 == 2, v1%3 == 0), 'take1', 2)]
+strategies:	 [(And(v0%3 == 0, v1%3 == 1), 'take2', 1),
+                (And(v0%3 == 1, v1%3 == 0), 'take1', 1),
+                (And(v0%3 == 2, v1%3 == 2), 'take1', 1),
+                (And(v0%3 == 0, v1%3 == 2), 'take2', 2),
+                (And(v0%3 == 1, v1%3 == 1), 'take2', 2),
+                (And(v0%3 == 2, v1%3 == 0), 'take1', 2)]
 time cost:	 10.087079048156738
 
 misere rule
 N-formula:	 Not((-1*v0 + v1)%3 == 1)
 time cost:	 45.49456286430359
-strategies:	 [(And((2*v0)%3 == 1, v1%3 == 2), 'take1', 1), (And((2*v0)%3 == 2, v1%3 == 1), 'take1', 1), (And((2*v0)%3 == 0, v1%3 == 2), 'take2', 1), (And((2*v0)%3 == 1, v1%3 == 1), 'take1', 2), (And((2*v0)%3 == 2, v1%3 == 0), 'take2', 1)]
+strategies:	 [(And((2*v0)%3 == 1, v1%3 == 2), 'take1', 1),
+                (And((2*v0)%3 == 2, v1%3 == 1), 'take1', 1),
+                (And((2*v0)%3 == 0, v1%3 == 2), 'take2', 1),
+                (And((2*v0)%3 == 1, v1%3 == 1), 'take1', 2),
+                (And((2*v0)%3 == 2, v1%3 == 0), 'take2', 1)]
 time cost:	 49.55741572380066

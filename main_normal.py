@@ -12,9 +12,9 @@ if __name__ == '__main__':
     # domain = PDDLParser("./pddl/L_shaped_chomp_game.pddl")
     # domain = PDDLParser("./pddl/Monotonic_2_piled_nim.pddl")
     # domain = PDDLParser("./pddl/monotic_2_diet_wythoff.pddl")
-    domain = PDDLParser("./pddl/monotonic_2_piled_wythoff_game.pddl")
+    # domain = PDDLParser("./pddl/monotonic_2_piled_wythoff_game.pddl")
     # domain = PDDLParser("./pddl/Take_Away.pddl")
-    # domain = PDDLParser("./pddl/Subtraction_game.pddl")
+    domain = PDDLParser("./pddl/Subtraction_game.pddl")
 
     gen = NormalGenerator(domain)
     formula_template = gen.generate_formula()
