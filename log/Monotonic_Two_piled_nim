@@ -19,3 +19,9 @@ N-formula:	 Not(-1*v0 + v1 == 0)
 time cost:	 4.382632732391357
 strategies:	 [(Not(0 <= -1*v0 + v1), 'take1', v0 + -1*v1), (Not(-1*v0 + v1 <= 0), 'take2', -1*v0 + v1)]
 time cost:	 5.058887004852295
+
+misere rule
+N-formula:	 Not(v0 + -1*v1 == -1)
+time cost:	 0.2199103832244873
+strategies:	 [(Not(-1 <= v0 + -1*v1), 'take2', -1 + -1*v0 + v1), (Not(v0 + -1*v1 <= -1), 'take1', 1)]
+time cost:	 1.4151690006256104

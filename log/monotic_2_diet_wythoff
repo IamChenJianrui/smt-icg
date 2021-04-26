@@ -20,3 +20,9 @@ N-formula:	 Not((v0 + v1)%3 == 0)
 time cost:	 2.270297050476074
 strategies:	 [(And(v0%3 == 0, v1%3 == 1), 'take2', 1), (And(v0%3 == 1, v1%3 == 0), 'take1', 1), (And(v0%3 == 2, v1%3 == 2), 'take1', 1), (And(v0%3 == 0, v1%3 == 2), 'take2', 2), (And(v0%3 == 2, v1%3 == 0), 'take1', 2)]
 time cost:	 5.790128231048584
+
+misere rule
+N-formula:	 Not((v0 + -1*v1)%3 == 2)
+time cost:	 2.8101322650909424
+strategies:	 [(And(v0%3 == 1, (2*v1)%3 == 2), 'take1', 1), (And(v0%3 == 2, (2*v1)%3 == 1), 'take1', 1), (And(v0%3 == 0, (2*v1)%3 == 1), 'take2', 1), (And(v0%3 == 1, (2*v1)%3 == 0), 'take2', 1), (And(v0%3 == 2, (2*v1)%3 == 2), 'take1', 2)]
+time cost:	 6.249990224838257

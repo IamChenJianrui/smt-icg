@@ -2,7 +2,7 @@
     (:objects ?v1 ?v2)
     (:type normal)
     (:tercondition (and (= ?v1 0) (= ?v2 0)))
-    (:constraint (and (>= ?v1 0) (>= ?v2 0)))
+    (:constraint (and (>= ?v1 0) (>= ?v2 ?v1)))
     (:action take1
         :parameters (?k)
         :precondition (or (and (= ?k 1) (> ?v1 0)) (and (= ?k 2) (> ?v1 1)))

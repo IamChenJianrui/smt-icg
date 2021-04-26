@@ -67,7 +67,7 @@ class FormulaTemplate:
         # 余数c_i必须小于模e
         self.s.add(*[And(self.ei[i] > self.ci[i], self.ci[i] >= 0) for i in range(m)])
         # 模必须大于等于2，并且小于一定范围
-        self.s.add(*[And(e <= 4 * m, e >= 2) for e in self.ei])
+        self.s.add(*[And(e <= 10 * m, e >= 2) for e in self.ei])
         for i in range(k):
             # 判断条件一定有一个是False，避免逻辑出现False
             for j in range(i + 1, k):
@@ -146,7 +146,7 @@ class FormulaTemplate:
             for i in range(self.k)
         ]
         for i in range(self.m):
-            flag = True
+            flag = True # 判断是否全部系数都相等
             pix = -1
             for am in self.M[i]:
                 if pix == -1:
@@ -155,23 +155,32 @@ class FormulaTemplate:
                 elif am != 0 and am != pix:
                     flag = False
                     break
-            if flag:
+            if flag: # 系数全部相同
                 if self.C[i] == 0:
-                    if co_prime(pix, self.E[i]):
-                        for j in range(self.n):
-                            if self.M[i][j] != 0:
-                                self.M[i][j] = 1
-                    else:
-                        div = gcd(pix, self.E[i])
-                        self.E[i] /= div
-                        for j in range(self.n):
-                            self.M[i][j] /= div
+                    # if co_prime(pix, self.E[i]):
+                    #     for j in range(self.n):
+                    #         if self.M[i][j] != 0:
+                    #             self.M[i][j] = 1
+                    # else:
+                    #     div = gcd(pix, self.E[i])
+                    #     self.E[i] /= div
+                    #     for j in range(self.n):
+                    #         self.M[i][j] /= div
+                    if not co_prime(pix, self.E[i]):
+                        self.E[i] /= gcd(pix, self.E[i])
+                    for j in range(self.n):
+                        self.M[i][j] = 1
                 else:
                     div = gcd(pix, self.E[i], self.C[i])
                     self.E[i] /= div
                     self.C[i] /= div
+                    pix /= div
                     for j in range(self.n):
                         self.M[i][j] /= div
+                    div = gcd(int(pix), int(self.C[i]))
+                    for j in range(self.n):
+                        self.M[i][j] /= div
+                    self.C[i] /= div
         for i in range(self.h):
             divisior = gcd(*self.A[i], self.B[i])
             self.B[i] /= divisior
@@ -273,7 +282,7 @@ class FormulaTemplate:
                         clause.append([self.build_formula(self.M[m], self.vi, self.E[m], C)])
                 elif status == (False, True):
                     mod_clause = []
-                    for i in range(int(self.E[m])):
+                    for i in range(self.E[m]):
                         if i != self.C[m]:
                             # mod_clause.append(Com % self.E[m] == i)
                             mod_res = []

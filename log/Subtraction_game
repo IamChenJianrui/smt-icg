@@ -10,3 +10,91 @@ N-formula:	 Not(v0%3 == 0)
 time cost:	 0.38690853118896484
 strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
 time cost:	 1.0292482376098633
+
+normal rule
+N-formula:	 And(Not(v0%7 == 0), Not((2*v0)%7 == 6))
+time cost:	 2412.500732898712
+strategies:	 [(v0%7 == 1, 'take', 1),
+                (v0%7 == 2, 'take', 2),
+                (v0%7 == 4, 'take', 1),
+                (v0%7 == 5, 'take', 2),
+                (v0%7 == 6, 'take', 6)]
+time cost:	 2424.966543197632
+
+normal rule
+N-formula:	 And(Not(v0%7 == 0), Not(v0%7 == 2))
+time cost:	 2407.512521505356
+strategies:	 [(v0%7 == 1, 'take', 1),
+            (v0%7 == 3, 'take', 1),
+            (v0%7 == 4, 'take', 4),
+            (v0%7 == 5, 'take', 3),
+            (v0%7 == 6, 'take', 4)]
+time cost:	 2409.871370792389
+
+normal rule
+N-formula:	 Not(v0%2 == 0)
+time cost:	 23.72017812728882
+strategies:	 [(v0%2 == 1, 'take', 1)]
+time cost:	 24.064897537231445
+
+
+
+normal rule
+N-formula:	 Not(v0%2 == 0)
+time cost:	 117.94564843177795
+strategies:	 [(v0%2 == 1, 'take', 1)]
+time cost:	 118.27579832077026
+
+normal rule
+N-formula:	 Not(v0%3 == 0)
+time cost:	 0.3099393844604492
+strategies:	 [(v0%3 == 1, 'take', 1), (v0%3 == 2, 'take', 2)]
+time cost:	 1.3652496337890625
+
+normal rule
+N-formula:	 Not(v0%2 == 0)
+time cost:	 600.5632643699646
+strategies:	 [(v0%2 == 1, 'take', 1)]
+time cost:	 600.8566417694092
+
+misere rule
+N-formula:	 Not(v0%3 == 1)
+time cost:	 8.304478645324707
+strategies:	 [(v0%3 == 0, 'take', 2), (v0%3 == 2, 'take', 1)]
+time cost:	 9.283501148223877
+
+misere rule
+N-formula:	 Not(v0%3 == 1)
+time cost:	 66.58500266075134
+strategies:	 [(v0%3 == 0, 'take', 2), (v0%3 == 2, 'take', 1)]
+time cost:	 67.5859808921814
+
+misere rule
+N-formula:	 v0%2 == 0
+time cost:	 32.572840452194214
+strategies:	 [(v0%2 == 0, 'take', 1)]
+time cost:	 33.05983924865723
+
+misere rule
+N-formula:	 v0%2 == 0
+time cost:	 0.5390300750732422
+strategies:	 [(v0%2 == 0, 'take', 1)]
+time cost:	 1.3039913177490234
+
+misere rule
+N-formula:	 Not(v0%3 == 1)
+time cost:	 14.508949518203735
+strategies:	 [(v0%3 == 0, 'take', 2), (v0%3 == 2, 'take', 1)]
+time cost:	 15.794957399368286
+
+misere rule
+N-formula:	 v0%2 == 0
+time cost:	 31.787821769714355
+strategies:	 [(v0%2 == 0, 'take', 1)]
+time cost:	 32.21184492111206
+
+misere rule
+N-formula:	 And(Not(v0%7 == 1), Not((3*v0)%7 == 2))
+time cost:	 975.5110902786255
+strategies:	 [(v0%7 == 0, 'take', 4), (v0%7 == 2, 'take', 1), (v0%7 == 4, 'take', 1), (v0%7 == 5, 'take', 4), (v0%7 == 6, 'take', 3)]
+time cost:	 977.8608484268188

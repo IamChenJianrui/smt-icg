@@ -1,5 +1,5 @@
 (define (domain n-take-away)
-    (:constants ?n 3)
+    (:constants ?n 6)
     (:objects ?v)
     (:type normal)
     (:tercondition (= ?v 0))

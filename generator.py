@@ -4,7 +4,7 @@ from z3 import *
 from random import randint
 
 tmp_size = [(1, 1, 0), (1, 0, 1), (1, 0, 2), (1, 1, 1), (2, 0, 1),
-            (2, 0, 2), (2, 1, 1), (2, 2, 1), (2, 1, 2), (2, 1, 4), (4, 1, 4)]
+            (2, 0, 2), (2, 1, 1), (2, 2, 1), (2, 1, 2), (2, 1, 4), (4, 1, 4), (2,3,0)]
 
 
 class NormalGenerator:
@@ -207,9 +207,9 @@ class NormalGenerator:
                        if model[vi[i]] is not None else 0 for i in range(len(vi))]
             example = tuple(example)
             demo[example] = []
-            return example
-        else:
-            raise RuntimeError("fail to generate state of cover:", cover)
+        #     return example
+        # else:
+        #     raise RuntimeError("fail to generate state of cover:", cover)
 
     def gen_eff2(self, state, action):
         var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
@@ -534,7 +534,7 @@ class MisereGenerator:
     def gen_example_of_cover(self, cover, demo):
         s = Solver()
         s.add(cover)
-        s.add(self.domain.constraints)
+        s.add(self.domain.constraints, self.not_equ_ending)
         vi = list(self.domain.pddl2icg.values())
         for state in demo:
             s.add(*[vi[i] != state[i] for i in range(len(vi))])
@@ -544,15 +544,15 @@ class MisereGenerator:
                        if model[vi[i]] is not None else 0 for i in range(len(vi))]
             example = tuple(example)
             demo[example] = []
-            return example
-        else:
-            raise RuntimeError("fail to generate state of cover:", cover)
+        #     return example
+        # else:
+        #     raise RuntimeError("fail to generate state of cover:", cover)
 
     def gen_eff2(self, state, action):
         var_dict = dict(zip(self.domain.pddl2icg.keys(), state))
         param, param_set, ok = action.get_all_params(var_dict)
         if ok:
-            if len(param_set) > 0:
+            if param_set is not None and len(param_set) > 0:
                 for k in param_set:
                     param_dict = {param: k}
                     eff_dict = action.get_eff(var_dict, param_dict)
@@ -635,7 +635,7 @@ class MisereGenerator:
                         print("param of action:", param_expr)
                         tf = action.trans_formula()
                         wf = self.formula_template.formula_model(*eff_var)
-                        const = simplify(Implies(cover, ForAll(eff_var, Implies(tf, Not(wf)))))
+                        const = simplify(Implies(And(self.not_equ_ending, cover), ForAll(eff_var, Implies(tf, Not(wf)))))
                         free_p = list(action.params_mapper.values())[0]  # 动作的参数
                         s = Solver()
                         s.add(self.domain.constraints, free_p == param_expr, Not(const))

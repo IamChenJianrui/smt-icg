@@ -18,3 +18,22 @@ N-formula:	 Not(-1*v0 + v1 == -1)
 time cost:	 0.3437075614929199
 strategies:	 [(Not(-1 <= -1*v0 + v1), 'eat1', 2 + v1), (Not(-1*v0 + v1 <= -1), 'eat2', v0)]
 time cost:	 0.8279359340667725
+
+misere rule
+N-formula:	 Not(v0 + v1 == 2)
+time cost:	 0.17012405395507812
+strategies:	 []
+time cost:	 0.5647437572479248
+
+misere rule
+N-formula:	 Not(v0 + v1 == 2)
+time cost:	 0.2200026512145996
+strategies:	 [(Not(2 <= v0 + v1), 'eat1', 0)]
+time cost:	 0.7598216533660889
+
+misere rule
+N-formula:	 Or(Not(-1*v0 + v1 == -1),
+   And(Not(-1*v0 + v1 == -1), Not((-1*v0 + v1)%4 == 3)))
+time cost:	 102.62013602256775
+strategies:	 [(Not(-1 <= -1*v0 + v1), 'eat1', 2 + v1), (Not(-1*v0 + v1 <= -1), 'eat2', v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 0, v1%4 == 0), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 1, v1%4 == 3), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 2, v1%4 == 2), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 3, v1%4 == 1), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 0, v1%4 == 1), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 1, v1%4 == 0), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 2, v1%4 == 3), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 3, v1%4 == 2), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 0, v1%4 == 2), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 1, v1%4 == 1), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 2, v1%4 == 0), 'eat1', 2 + v1), (And(Not(-1 <= -1*v0 + v1), (3*v0)%4 == 3, v1%4 == 3), 'eat1', 2 + v1), (And(Not(-1*v0 + v1 <= -1), (3*v0)%4 == 0, v1%4 == 0), 'eat2', v0), (And(Not(-1*v0 + v1 <= -1), (3*v0)%4 == 1, v1%4 == 3), 'eat2', v0), (And(Not(-1*v0 + v1 <= -1), (3*v0)%4 == 2, v1%4 == 2), 'eat2', v0), (And(Not(-1*v0 + v1 <= -1), (3*v0)%4 == 3, v1%4 == 1), 'eat2', v0)]
+time cost:	 116.51019477844238
